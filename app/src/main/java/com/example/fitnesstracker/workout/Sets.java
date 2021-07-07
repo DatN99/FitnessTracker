@@ -5,20 +5,34 @@ import android.os.Parcelable;
 
 public class Sets implements Parcelable {
 
-    private static String name;
-    private static String reps;
-    private static String weight;
+    private String name;
+    private String reps;
+    private String weight;
 
     public Sets(String nameStr, String repsStr, String weightStr){
-        name = nameStr;
-        reps = repsStr;
-        weight = weightStr;
+
+        this.name = nameStr;
+        this.reps = repsStr;
+        this.weight = weightStr;
+
     }
 
     protected Sets(Parcel in) {
         name = in.readString();
         reps = in.readString();
         weight = in.readString();
+    }
+
+    public String getName(){
+        return name;
+    }
+
+    public String getReps(){
+        return reps;
+    }
+
+    public String getWeight(){
+        return weight;
     }
 
     public static final Creator<Sets> CREATOR = new Creator<Sets>() {

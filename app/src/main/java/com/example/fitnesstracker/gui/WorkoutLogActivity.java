@@ -1,6 +1,8 @@
 package com.example.fitnesstracker.gui;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -21,17 +23,18 @@ public class WorkoutLogActivity extends AppCompatActivity {
 
 
     //Widget variables
-    private TextInputLayout nameInput;
-    private TextInputLayout repsInput;
-    private TextInputLayout weightInput;
-    private Button confirmSet;
+    private Button addSet;
     private Button finishWorkout;
+
+    //RecyclerView variables
+    private RecyclerView mRecyclerView;
+    private RecyclerView.Adapter mAdapter;
+    private RecyclerView.LayoutManager mLayoutManager;
+    private static int position = 0;
 
     //Sets Variables
     ArrayList<Sets> SetsList = new ArrayList<>();
-    String Name;
-    String Reps;
-    String Weight;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -39,93 +42,40 @@ public class WorkoutLogActivity extends AppCompatActivity {
         setContentView(R.layout.activity_workout_log);
 
         //finding widgets
-        nameInput = findViewById(R.id.nameTextInput);
-        repsInput = findViewById(R.id.repsTextInput);
-        weightInput = findViewById(R.id.weightTextInput);
-        confirmSet = findViewById(R.id.confirmSetButton);
+        addSet = findViewById(R.id.addSetButton);
         finishWorkout = findViewById(R.id.finishButton);
+
+
+        //RecyclerView Setup
+        mRecyclerView = findViewById(R.id.recyclerView);
+        mRecyclerView.setHasFixedSize(false);
+        mLayoutManager = new LinearLayoutManager(this);
+        mAdapter = new SetAdapter(SetsList);
+        mRecyclerView.setLayoutManager(mLayoutManager);
+        mRecyclerView.setAdapter(mAdapter);
 
         
     }
 
-    protected boolean validateName() {
-        //String value of user input in "Name"
-        Name = nameInput.getEditText().getText().toString().trim();
 
-        //Name field cannot be empty
-        if (Name.isEmpty()){
-            nameInput.setError("Field can't be empty");
-            return false;
-        }
+    //called when Add Set button is clicked
+    public void addSet(View V){
+        AddSetFragment addSet = new AddSetFragment();
+        addSet.show(getSupportFragmentManager(), "testFragment");
+        onPause();
 
-        //Valid Input
-        else {
-            nameInput.setError(null);
-            nameInput.setErrorEnabled(false);
-            return true;
-        }
-    }
-
-    protected boolean validateReps(){
-        //String value of user input in "Reps"
-        Reps = repsInput.getEditText().getText().toString().trim();
-
-        boolean containsLetters = Reps.matches("[0-9]+");
+        Intent intent = getIntent();
+        Sets temp = intent.getParcelableExtra("New Set");
 
 
-        //Reps field cannot be empty
-        if (Reps.isEmpty()){
-            repsInput.setError("Field can't be empty");
-            return false;
-        }
+            SetsList.add(position, temp);
 
-        //Reps field cannot have an alpha character
-        else if (!containsLetters){
-            repsInput.setError("Reps must be a valid number");
-            return false;
-        }
+            //udpdate RecyclerView
+            mAdapter.notifyItemInserted(position);
+            mLayoutManager.scrollToPosition(position);
+            position++;
 
-        //Valid Input
-        else {
-            repsInput.setError(null);
-            repsInput.setErrorEnabled(false);
-            return true;
-        }
-    }
 
-    protected boolean validateWeight(){
-        //String value of user input in "Weight (lbs)"
-        Weight = weightInput.getEditText().getText().toString().trim();
-
-        boolean containsLetters = Weight.matches("[0-9]+");
-
-        //Weight field cannot be empty
-        if (Weight.isEmpty()){
-            weightInput.setError("Field can't be empty");
-            return false;
-        }
-
-        //Weight field cannot have an alpha character
-        else if (!containsLetters){
-            weightInput.setError("Reps must be a valid number");
-            return false;
-        }
-
-        //Valid Input
-        else {
-            weightInput.setError(null);
-            weightInput.setErrorEnabled(false);
-            return true;
-        }
-    }
-
-    //called when Add Workout button is clicked
-    public void addWorkout(View V){
-        String input;
-
-        if (validateName() && validateReps() && validateWeight()){
-            //Create new Set Object and add to ArrayList SetsList
-            SetsList.add(new Sets(Name, Reps, Weight));
             Toast.makeText(this, "Set Added", Toast.LENGTH_SHORT).show();
 
             //Store in shared preferences to retrieve data in future
@@ -136,7 +86,9 @@ public class WorkoutLogActivity extends AppCompatActivity {
             editor.putString("All Sets", json);
             editor.apply();
 
-        }
+
+
+
     }
 
     //add all sets to workout

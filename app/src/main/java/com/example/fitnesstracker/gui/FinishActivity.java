@@ -29,6 +29,7 @@ public class FinishActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_finish);
 
+
         Intent intent = getIntent();
         ArrayList<Sets> SetsList = intent.getExtras().getParcelableArrayList("Sets List");
 
@@ -37,4 +38,6 @@ public class FinishActivity extends AppCompatActivity {
 
 
     }
+
+
 }

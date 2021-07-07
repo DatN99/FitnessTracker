@@ -7,15 +7,15 @@ import java.util.Date;
 
 public class Workout {
 
-    private static int month;
-    private static int date;
-    private static int year;
+    private int month;
+    private int date;
+    private int year;
 
-    private static int hour;
-    private static int minute;
+    private int hour;
+    private int minute;
 
-    private static int volume;
-    private static Sets[] Sets;
+    private int volume;
+    private Sets[] Sets;
 
 
     public Workout getWorkout(int date){
