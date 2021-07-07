@@ -1,6 +1,8 @@
 package com.example.fitnesstracker.gui;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.fragment.app.FragmentManager;
+import androidx.fragment.app.FragmentTransaction;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -10,6 +12,7 @@ import android.os.Bundle;
 import android.os.Parcelable;
 import android.view.View;
 import android.widget.Button;
+import android.widget.FrameLayout;
 import android.widget.Toast;
 
 import com.example.fitnesstracker.R;
@@ -19,12 +22,12 @@ import com.google.gson.Gson;
 
 import java.util.ArrayList;
 
-public class WorkoutLogActivity extends AppCompatActivity {
-
+public class WorkoutLogActivity extends AppCompatActivity implements addSetFragment.OnFragmentInteractionListener {
 
     //Widget variables
     private Button addSet;
     private Button finishWorkout;
+    private FrameLayout addSetFragment1;
 
     //RecyclerView variables
     private RecyclerView mRecyclerView;
@@ -40,6 +43,10 @@ public class WorkoutLogActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_workout_log);
+
+
+        //finding Fragment layout
+        addSetFragment1 = findViewById(R.id.addSetFragment);
 
         //finding widgets
         addSet = findViewById(R.id.addSetButton);
@@ -58,38 +65,43 @@ public class WorkoutLogActivity extends AppCompatActivity {
     }
 
 
-    //called when Add Set button is clicked
-    public void addSet(View V){
-        AddSetFragment addSet = new AddSetFragment();
-        addSet.show(getSupportFragmentManager(), "testFragment");
-        onPause();
+    //opens fragment when "Add Set" button is clicked
+    public void openAddSetFragment(View V){
 
-        Intent intent = getIntent();
-        Sets temp = intent.getParcelableExtra("New Set");
-
-
-            SetsList.add(position, temp);
-
-            //udpdate RecyclerView
-            mAdapter.notifyItemInserted(position);
-            mLayoutManager.scrollToPosition(position);
-            position++;
-
-
-            Toast.makeText(this, "Set Added", Toast.LENGTH_SHORT).show();
-
-            //Store in shared preferences to retrieve data in future
-            SharedPreferences data = getSharedPreferences("data", MODE_PRIVATE);
-            SharedPreferences.Editor editor = data.edit();
-            Gson gson = new Gson();
-            String json = gson.toJson(SetsList);
-            editor.putString("All Sets", json);
-            editor.apply();
-
-
-
+        addSetFragment fragment = addSetFragment.newInstance();
+        FragmentManager fragmentManager = getSupportFragmentManager();
+        FragmentTransaction transaction = fragmentManager.beginTransaction();
+        transaction.addToBackStack(null);
+        transaction.add(R.id.addSetFragment, fragment, "New Fragment").commit();
 
     }
+
+
+    //called after user selects "Confirm Set"
+    @Override
+    public void onFragmentInteraction(Sets CurrSet) {
+
+        //add new CurrSet to SetsList
+        SetsList.add(position, CurrSet);
+
+        //udpdate RecyclerView
+        mAdapter.notifyItemInserted(position);
+        mLayoutManager.scrollToPosition(position);
+        position++;
+
+        Toast.makeText(this, "Set Added", Toast.LENGTH_SHORT).show();
+
+        //Store in shared preferences to retrieve data in future
+        SharedPreferences data = getSharedPreferences("data", MODE_PRIVATE);
+        SharedPreferences.Editor editor = data.edit();
+        Gson gson = new Gson();
+        String json = gson.toJson(SetsList);
+        editor.putString("All Sets", json);
+        editor.apply();
+        onBackPressed();
+
+    }
+
 
     //add all sets to workout
     public void openFinishActivity(View V){

@@ -24,7 +24,7 @@
         android:layout_height="wrap_content"
         android:layout_above="@id/finishButton"
         android:layout_alignParentRight="true"
-        android:onClick="addSet"
+        android:onClick="openAddSetFragment"
         android:text="Add Set"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
@@ -33,6 +33,7 @@
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintVertical_bias="0.687"
         />
+
 
     <Button
         android:id="@+id/finishButton"
@@ -47,7 +48,12 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintVertical_bias="0.815"
-
         />
 
+
+    <FrameLayout
+        android:id="@+id/addSetFragment"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        />
 </RelativeLayout>
