@@ -5,10 +5,12 @@ import android.os.Parcelable;
 
 public class Sets implements Parcelable {
 
+    //private variables in String format
     private String name;
     private String reps;
     private String weight;
 
+    //public constructor
     public Sets(String nameStr, String repsStr, String weightStr){
 
         this.name = nameStr;
@@ -33,6 +35,18 @@ public class Sets implements Parcelable {
 
     public String getWeight(){
         return weight;
+    }
+
+    public int getRepsInt(){
+        return Integer.parseInt(reps);
+    }
+
+    public int getWeightInt(){
+        return Integer.parseInt(weight);
+    }
+
+    public String getString(){
+        return name+"-"+weight+"-"+reps;
     }
 
     public static final Creator<Sets> CREATOR = new Creator<Sets>() {

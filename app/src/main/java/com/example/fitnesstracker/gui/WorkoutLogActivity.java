@@ -39,6 +39,8 @@ public class WorkoutLogActivity extends AppCompatActivity implements addSetFragm
     ArrayList<Sets> SetsList = new ArrayList<>();
 
 
+
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);

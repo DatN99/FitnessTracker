@@ -12,6 +12,7 @@ import com.example.fitnesstracker.R;
 public class MainActivity extends AppCompatActivity {
     //Widget Variables
     Button addWorkoutButton;
+    Button pastWorkoutsButton;
 
 
     @Override
@@ -21,21 +22,38 @@ public class MainActivity extends AppCompatActivity {
 
         //Find Widgets
         addWorkoutButton = findViewById(R.id.addWorkout);
-
+        pastWorkoutsButton = findViewById(R.id.previousWorkoutsButton);
 
         //Click to add a workout
         addWorkoutButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+
                 openWorkoutLogActivity();
             }
         });
+
+
+        //Click to see past workouts
+        pastWorkoutsButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                openPastWorkoutsActivity();
+            }
+        });
+
     }
 
 
     public void openWorkoutLogActivity(){
         Intent SwitchToWorkoutLog = new Intent(this, WorkoutLogActivity.class);
         startActivity(SwitchToWorkoutLog);
+
+    }
+
+    public void openPastWorkoutsActivity(){
+        Intent SwitchToPastWorkouts = new Intent(this, PastWorkouts.class);
+        startActivity(SwitchToPastWorkouts);
 
     }
 }
