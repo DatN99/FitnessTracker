@@ -56,7 +56,7 @@ public class FinishActivity extends AppCompatActivity {
     }
 
     public void setWorkoutStr(){
-        workoutStr = workout.getTimeStr() + "," + workout.getVolumeStr();
+        workoutStr = workout.getTimeStr() + workout.getDateStr() + workout.getVolumeStr();
 
         String setinfo = "";
 

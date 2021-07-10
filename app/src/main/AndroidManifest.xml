@@ -9,7 +9,8 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.FitnessTracker">
-        <activity android:name=".gui.PastWorkouts"></activity>
+        <activity android:name=".gui.ProgressGraphActivity"></activity>
+        <activity android:name=".gui.PastWorkoutsActivity" />
         <activity android:name=".gui.FinishActivity" />
         <activity android:name=".gui.WorkoutLogActivity" />
         <activity android:name=".gui.MainActivity">

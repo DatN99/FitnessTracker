@@ -56,7 +56,7 @@ public class WorkoutLogActivity extends AppCompatActivity implements addSetFragm
 
 
         //RecyclerView Setup
-        mRecyclerView = findViewById(R.id.recyclerView);
+        mRecyclerView = findViewById(R.id.workoutlogrecyclerView);
         mRecyclerView.setHasFixedSize(false);
         mLayoutManager = new LinearLayoutManager(this);
         mAdapter = new SetAdapter(SetsList);

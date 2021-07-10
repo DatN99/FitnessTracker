@@ -27,18 +27,18 @@ public class Workout {
     ArrayList<Sets> Sets;
 
 
-    public Workout getWorkout(int date){
+    public Workout getWorkout(int date) {
         return null;
     }
 
 
-    public void saveWorkout(ArrayList<Sets> SetsList){
+    public void saveWorkout(ArrayList<Sets> SetsList) {
 
         Sets = SetsList;
 
         //Get current date to assign to workout
         Calendar calendar = Calendar.getInstance();
-        month = calendar.get(Calendar.MONTH)+1;
+        month = calendar.get(Calendar.MONTH) + 1;
         date = calendar.get(Calendar.DATE);
         year = calendar.get(Calendar.YEAR);
 
@@ -52,38 +52,61 @@ public class Workout {
 
     }
 
-    private void calculateVolume(){
-        for (Sets currSet : Sets){
+    private void calculateVolume() {
+        for (Sets currSet : Sets) {
             volume += currSet.getRepsInt() * currSet.getWeightInt();
         }
     }
 
     //Format: HHMM
     //Note: 0 is used as a placeholder
-    public String getTimeStr(){
+    public String getTimeStr() {
         String hourStr;
         String minuteStr;
 
-        if (hour < 10){
+        if (hour < 10) {
             hourStr = "0" + Integer.toString(hour);
-        }
-        else{
+        } else {
             hourStr = Integer.toString(hour);
         }
 
-        if (minute < 10){
+        if (minute < 10) {
             minuteStr = "0" + Integer.toString(minute);
-        }
-        else{
+        } else {
             minuteStr = Integer.toString(minute);
         }
 
-        return hourStr+minuteStr;
+        return hourStr + minuteStr;
     }
 
-    public String getVolumeStr(){
+    //returns volume as an int
+    public String getVolumeStr() {
         return Integer.toString(volume);
     }
 
+    //format: MMDDYYYY
+    //Note: 0 is used as a placeholder
+    public String getDateStr() {
 
+        String monthStr;
+        String dateStr;
+        String yearStr;
+
+        if (month < 10) {
+            monthStr = "0" + Integer.toString(month);
+        } else {
+            monthStr = Integer.toString(month);
+        }
+
+        if (date < 10) {
+            dateStr = "0" + Integer.toString(date);
+        } else {
+            dateStr = Integer.toString(date);
+        }
+
+        yearStr = Integer.toString(year);
+
+        return monthStr + dateStr + yearStr;
+
+    }
 }

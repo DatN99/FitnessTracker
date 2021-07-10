@@ -13,6 +13,7 @@ public class MainActivity extends AppCompatActivity {
     //Widget Variables
     Button addWorkoutButton;
     Button pastWorkoutsButton;
+    Button seeGraphButton;
 
 
     @Override
@@ -23,6 +24,7 @@ public class MainActivity extends AppCompatActivity {
         //Find Widgets
         addWorkoutButton = findViewById(R.id.addWorkout);
         pastWorkoutsButton = findViewById(R.id.previousWorkoutsButton);
+        seeGraphButton = findViewById(R.id.graphButton);
 
         //Click to add a workout
         addWorkoutButton.setOnClickListener(new View.OnClickListener() {
@@ -42,7 +44,15 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
+        seeGraphButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                openGraphActivity();
+            }
+        });
+
     }
+
 
 
     public void openWorkoutLogActivity(){
@@ -52,8 +62,13 @@ public class MainActivity extends AppCompatActivity {
     }
 
     public void openPastWorkoutsActivity(){
-        Intent SwitchToPastWorkouts = new Intent(this, PastWorkouts.class);
+        Intent SwitchToPastWorkouts = new Intent(this, PastWorkoutsActivity.class);
         startActivity(SwitchToPastWorkouts);
 
+    }
+
+    public void openGraphActivity(){
+        Intent SwitchToGraph = new Intent(this, ProgressGraphActivity.class);
+        startActivity(SwitchToGraph);
     }
 }
