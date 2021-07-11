@@ -96,7 +96,6 @@ public class ProgressGraphActivity extends AppCompatActivity {
         Chart.setData(data);
 
 
-
         ArrayList<String> s = new ArrayList<String>();
 
         for (int i = 0; i < VolumeList.size(); i++){
