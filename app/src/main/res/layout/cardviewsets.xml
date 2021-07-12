@@ -47,6 +47,25 @@
             android:textSize="20sp"
             android:textStyle="bold" />
 
+
+        <Button
+            android:id="@+id/addCopyButton"
+            android:layout_width="20dp"
+            android:layout_height="20dp"
+            android:layout_centerVertical="true"
+            android:layout_centerHorizontal="true"
+            android:text="+"
+            />
+
+        <Button
+            android:id="@+id/removeButton"
+            android:layout_width="20dp"
+            android:layout_height="20dp"
+            android:layout_toRightOf="@id/addCopyButton"
+            android:layout_centerVertical="true"
+            android:text="-" />
+
+
     </RelativeLayout>
 
 

@@ -1,6 +1,7 @@
 package com.example.fitnesstracker.gui;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.cardview.widget.CardView;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
 import androidx.recyclerview.widget.LinearLayoutManager;
@@ -10,6 +11,7 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.os.Parcelable;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.FrameLayout;
@@ -31,13 +33,11 @@ public class WorkoutLogActivity extends AppCompatActivity implements addSetFragm
 
     //RecyclerView variables
     private RecyclerView mRecyclerView;
-    private RecyclerView.Adapter mAdapter;
+    private SetAdapter mAdapter;
     private RecyclerView.LayoutManager mLayoutManager;
-    private static int position = 0;
 
     //Sets Variables
     ArrayList<Sets> SetsList = new ArrayList<>();
-
 
 
 
@@ -45,7 +45,6 @@ public class WorkoutLogActivity extends AppCompatActivity implements addSetFragm
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_workout_log);
-
 
         //finding Fragment layout
         addSetFragment1 = findViewById(R.id.addSetFragment);
@@ -63,12 +62,38 @@ public class WorkoutLogActivity extends AppCompatActivity implements addSetFragm
         mRecyclerView.setLayoutManager(mLayoutManager);
         mRecyclerView.setAdapter(mAdapter);
 
-        
+
+        mAdapter.setOnItemClickListener(new SetAdapter.OnItemClickListener() {
+            @Override
+            public void onAddItem(int position) {
+                Sets copy = SetsList.get(position);
+                addCopy(position+1, copy);
+            }
+
+            @Override
+            public void onDeleteItem(int position){
+                removeItem(position);
+            }
+        });
+
+
+    }
+
+    public void removeItem(int position){
+        SetsList.remove(position);
+        mAdapter.notifyItemRemoved(position);
+    }
+
+    public void addCopy(int position, Sets copy){
+        SetsList.add(position, copy);
+        mAdapter.notifyItemInserted(position);
     }
 
 
     //opens fragment when "Add Set" button is clicked
     public void openAddSetFragment(View V){
+
+        onResume();
 
         addSetFragment fragment = addSetFragment.newInstance();
         FragmentManager fragmentManager = getSupportFragmentManager();
@@ -83,23 +108,18 @@ public class WorkoutLogActivity extends AppCompatActivity implements addSetFragm
     @Override
     public void onFragmentInteraction(Sets CurrSet) {
 
+
         //add new CurrSet to SetsList
-        SetsList.add(position, CurrSet);
+        SetsList.add(SetsList.size(), CurrSet);
+
 
         //udpdate RecyclerView
-        mAdapter.notifyItemInserted(position);
-        mLayoutManager.scrollToPosition(position);
-        position++;
+        mAdapter.notifyItemInserted(SetsList.size());
+        mLayoutManager.scrollToPosition(SetsList.size());
+
 
         Toast.makeText(this, "Set Added", Toast.LENGTH_SHORT).show();
 
-        //Store in shared preferences to retrieve data in future
-        SharedPreferences data = getSharedPreferences("data", MODE_PRIVATE);
-        SharedPreferences.Editor editor = data.edit();
-        Gson gson = new Gson();
-        String json = gson.toJson(SetsList);
-        editor.putString("All Sets", json);
-        editor.apply();
         onBackPressed();
 
     }
@@ -115,4 +135,33 @@ public class WorkoutLogActivity extends AppCompatActivity implements addSetFragm
         startActivity(SwitchToFinish);
 
     }
+
+    @Override
+    protected void onStart(){
+        super.onStart();
+        Log.i("WorkoutLogActivity", "onStart");
+    }
+
+    @Override
+    protected void onResume(){
+        super.onResume();
+        Log.i("WorkoutLogActivity", "onResume");
+    }
+
+    @Override
+    protected void onPause(){
+        super.onPause();
+        Log.i("WorkoutLogActivity", "onPause");
+    }
+
+    @Override
+    public void onBackPressed(){
+        super.onBackPressed();
+    }
+
+
+
+
+
+
 }

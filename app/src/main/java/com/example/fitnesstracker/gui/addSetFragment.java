@@ -60,6 +60,7 @@ public class addSetFragment extends Fragment {
         repsInput = view.findViewById(R.id.repsTextInput);
         weightInput = view.findViewById(R.id.weightTextInput);
 
+
         //if user selects "confirm set", go to confirmSet()
         confirmSetButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -67,6 +68,8 @@ public class addSetFragment extends Fragment {
                 confirmSet();
             }
         });
+
+
         return view;
     }
 
@@ -180,5 +183,6 @@ public class addSetFragment extends Fragment {
 
     public interface OnFragmentInteractionListener{
         void onFragmentInteraction(Sets CurrSet);
+
     }
 }
