@@ -1,0 +1,89 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:padding="16dp"
+    >
+
+    <!--
+    <EditText
+        android:id="@+id/nameEditText"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerHorizontal="true"
+        android:hint="NAME" />
+
+    <EditText
+        android:id="@+id/repsEditText"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/nameEditText"
+        android:layout_centerHorizontal="true"
+        android:hint="REPS" />
+
+    <EditText
+        android:id="@+id/weightEditText"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerHorizontal="true"
+        android:layout_below="@id/repsEditText"
+        android:hint="WEIGHT" />
+    -->
+    <com.google.android.material.textfield.TextInputLayout
+        android:id="@+id/nameTextInput"
+        android:layout_width="150dp"
+        android:layout_height="wrap_content"
+        android:layout_alignParentTop="true"
+        android:layout_centerHorizontal="true"
+        >
+        <com.google.android.material.textfield.TextInputEditText
+            android:id="@+id/nameInputEditText"
+            android:layout_width="162dp"
+            android:layout_height="wrap_content"
+            android:hint="Excercise Name"
+            />
+    </com.google.android.material.textfield.TextInputLayout>
+
+
+    <com.google.android.material.textfield.TextInputLayout
+        android:id="@+id/repsTextInput"
+        android:layout_width="150dp"
+        android:layout_height="wrap_content"
+        android:layout_centerHorizontal="true"
+        android:layout_below="@id/nameTextInput"
+        >
+        <com.google.android.material.textfield.TextInputEditText
+            android:id="@+id/repsInputEditText"
+            android:layout_width="162dp"
+            android:layout_height="wrap_content"
+            android:hint="Reps" />
+    </com.google.android.material.textfield.TextInputLayout>
+
+
+    <com.google.android.material.textfield.TextInputLayout
+        android:id="@+id/weightTextInput"
+        android:layout_width="150dp"
+        android:layout_height="wrap_content"
+        android:layout_centerHorizontal="true"
+        android:layout_below="@id/repsTextInput"
+        >
+        <com.google.android.material.textfield.TextInputEditText
+            android:id="@+id/weightInputEditText"
+            android:layout_width="162dp"
+            android:layout_height="wrap_content"
+            android:hint="Weight (lbs)"
+            />
+    </com.google.android.material.textfield.TextInputLayout>
+
+
+    <Button
+        android:id="@+id/confirmSetButton"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerHorizontal="true"
+        android:layout_below="@id/weightTextInput"
+        android:text="Confirm Set"
+        />
+
+
+</RelativeLayout>

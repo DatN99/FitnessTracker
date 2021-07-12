@@ -1,109 +1,92 @@
 package com.example.fitnesstracker.gui;
 
+import android.app.AlertDialog;
+import android.app.Dialog;
 import android.content.Context;
-import android.content.Intent;
+import android.content.DialogInterface;
 import android.os.Bundle;
-import androidx.fragment.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
-import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.EditText;
+
+import androidx.annotation.NonNull;
+import androidx.appcompat.app.AppCompatDialogFragment;
 
 import com.example.fitnesstracker.R;
 import com.example.fitnesstracker.workout.Sets;
 import com.google.android.material.textfield.TextInputLayout;
 
-public class addSetFragment extends Fragment {
-    private OnFragmentInteractionListener mListener;
+public class addSetDialog extends AppCompatDialogFragment {
+
+    private String name;
+    private String reps;
+    private String weight;
+
 
     //Widget variables
     private Button confirmSetButton;
     private TextInputLayout nameInput;
     private TextInputLayout repsInput;
     private TextInputLayout weightInput;
+    private addSetDialogListener listener;
 
-    //Sets variables
-    String Name;
-    String Reps;
-    String Weight;
-
-    //creates new instance of fragment
-    public static addSetFragment newInstance() {
-        addSetFragment fragment = new addSetFragment();
-        Bundle args = new Bundle();
-        fragment.setArguments(args);
-        return fragment;
-    }
-
-    //constructor
-    public addSetFragment() {
-        // Required empty public constructor
-    }
-
-    //displays layout upon creating
-    @Override
-    public void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-
+    public interface addSetDialogListener{
+        void sendSetInfo(String name, String reps, String weight);
     }
 
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
-                             Bundle savedInstanceState) {
+    public Dialog onCreateDialog(Bundle savedInstanceStanec) {
+
+        AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
+
+        LayoutInflater inflater = getActivity().getLayoutInflater();
+
+        View view = inflater.inflate(R.layout.layout_dialog, null);
+
+        builder.setView(view);
+        builder.setTitle("Add Set");
 
 
-        // Inflate the layout for this fragment
-        View view = inflater.inflate(R.layout.fragment_add_set, container, false);
-
-        //find widgets
         confirmSetButton = view.findViewById(R.id.confirmSetButton);
         nameInput = view.findViewById(R.id.nameTextInput);
         repsInput = view.findViewById(R.id.repsTextInput);
         weightInput = view.findViewById(R.id.weightTextInput);
 
-
-        //if user selects "confirm set", go to confirmSet()
         confirmSetButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                confirmSet();
+                if (validateName() && validateReps() && validateWeight()){
+                    listener.sendSetInfo(name, reps, weight);
+                    dismiss();
+
+                }
             }
         });
 
+        return builder.create();
 
-        return view;
-    }
-
-    public void sendBack(Sets newSet){
-        if (mListener != null){
-            mListener.onFragmentInteraction(newSet);
-        }
     }
 
     @Override
     public void onAttach(Context context) {
         super.onAttach(context);
-        if (context instanceof OnFragmentInteractionListener) {
-            mListener = (OnFragmentInteractionListener) context;
-        } else {
-            throw new RuntimeException(context.toString()
-                    + " must implement OnFragmentInteractionListener");
+
+        try {
+            listener = (addSetDialogListener) context;
+        } catch (ClassCastException e){
+            throw new ClassCastException(context.toString() + "must implement addSetDialogListener");
         }
     }
 
-    @Override
-    public void onDetach() {
-        super.onDetach();
-        mListener = null;
-    }
 
     //method for exercise name limitations and regulations
     protected boolean validateName() {
         //String value of user input in "Name"
-        Name = nameInput.getEditText().getText().toString().trim();
+        name = nameInput.getEditText().getText().toString();
 
         //Name field cannot be empty
-        if (Name.isEmpty()){
+        if (name.equals("")){
             nameInput.setError("Field can't be empty");
             return false;
         }
@@ -111,7 +94,6 @@ public class addSetFragment extends Fragment {
         //Valid Input
         else {
             nameInput.setError(null);
-            nameInput.setErrorEnabled(false);
             return true;
         }
     }
@@ -119,12 +101,12 @@ public class addSetFragment extends Fragment {
     //method for reps limitations and regulations
     protected boolean validateReps(){
         //String value of user input in "Reps"
-        Reps = repsInput.getEditText().getText().toString().trim();
+        reps = repsInput.getEditText().getText().toString().trim();
 
-        boolean containsLetters = Reps.matches("[0-9]+");
+        boolean containsLetters = reps.matches("[0-9]+");
 
         //Reps field cannot be empty
-        if (Reps.isEmpty()){
+        if (reps.isEmpty()){
             repsInput.setError("Field can't be empty");
             return false;
         }
@@ -138,7 +120,6 @@ public class addSetFragment extends Fragment {
         //Valid Input
         else {
             repsInput.setError(null);
-            repsInput.setErrorEnabled(false);
             return true;
         }
     }
@@ -147,12 +128,12 @@ public class addSetFragment extends Fragment {
     protected boolean validateWeight(){
 
         //String value of user input in "Weight (lbs)"
-        Weight = weightInput.getEditText().getText().toString().trim();
+        weight = weightInput.getEditText().getText().toString().trim();
 
-        boolean containsLetters = Weight.matches("[0-9]+");
+        boolean containsLetters = weight.matches("[0-9]+");
 
         //Weight field cannot be empty
-        if (Weight.isEmpty()){
+        if (weight.isEmpty()){
             weightInput.setError("Field can't be empty");
             return false;
         }
@@ -166,29 +147,8 @@ public class addSetFragment extends Fragment {
         //Valid Input
         else {
             weightInput.setError(null);
-            weightInput.setErrorEnabled(false);
             return true;
         }
-    }
-
-    public void confirmSet(){
-        Context mContext = getContext();
-
-        if (validateName() && validateReps() && validateWeight()){
-            Sets newSet = new Sets(Name, Reps, Weight);
-
-            sendBack(newSet);
-
-        }
-
-
-
-
-    }
-
-    public interface OnFragmentInteractionListener{
-        void onFragmentInteraction(Sets CurrSet);
-
     }
 
 

@@ -7,6 +7,7 @@ import androidx.fragment.app.FragmentTransaction;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
@@ -24,7 +25,7 @@ import com.google.gson.Gson;
 
 import java.util.ArrayList;
 
-public class WorkoutLogActivity extends AppCompatActivity implements addSetFragment.OnFragmentInteractionListener {
+public class WorkoutLogActivity extends AppCompatActivity implements addSetDialog.addSetDialogListener {
 
     //Widget variables
     private Button addSet;
@@ -38,6 +39,12 @@ public class WorkoutLogActivity extends AppCompatActivity implements addSetFragm
 
     //Sets Variables
     ArrayList<Sets> SetsList = new ArrayList<>();
+
+
+
+    private final String KEY_RECYCLER_STATE = "recycler_state";
+    private static Bundle mBundleRecyclerViewState;
+
 
 
 
@@ -93,22 +100,26 @@ public class WorkoutLogActivity extends AppCompatActivity implements addSetFragm
     //opens fragment when "Add Set" button is clicked
     public void openAddSetFragment(View V){
 
-        onResume();
+        addSetDialog Dialog = new addSetDialog();
+        Dialog.show(getSupportFragmentManager(), "addSetDialog");
 
+
+        /**
         addSetFragment fragment = addSetFragment.newInstance();
         FragmentManager fragmentManager = getSupportFragmentManager();
         FragmentTransaction transaction = fragmentManager.beginTransaction();
         transaction.addToBackStack(null);
         transaction.add(R.id.addSetFragment, fragment, "New Fragment").commit();
+        */
 
     }
 
 
     //called after user selects "Confirm Set"
-    @Override
+   // @Override
     public void onFragmentInteraction(Sets CurrSet) {
 
-
+        /**
         //add new CurrSet to SetsList
         SetsList.add(SetsList.size(), CurrSet);
 
@@ -119,8 +130,8 @@ public class WorkoutLogActivity extends AppCompatActivity implements addSetFragm
 
 
         Toast.makeText(this, "Set Added", Toast.LENGTH_SHORT).show();
+        */
 
-        onBackPressed();
 
     }
 
@@ -136,32 +147,19 @@ public class WorkoutLogActivity extends AppCompatActivity implements addSetFragm
 
     }
 
-    @Override
-    protected void onStart(){
-        super.onStart();
-        Log.i("WorkoutLogActivity", "onStart");
-    }
 
     @Override
-    protected void onResume(){
-        super.onResume();
-        Log.i("WorkoutLogActivity", "onResume");
+    public void sendSetInfo(String name, String reps, String weight) {
+
+
+        SetsList.add(SetsList.size(), new Sets(name, reps, weight));
+
+
+        //udpdate RecyclerView
+        mAdapter.notifyItemInserted(SetsList.size());
+        mLayoutManager.scrollToPosition(SetsList.size());
+
+
+        Toast.makeText(this, "Set Added", Toast.LENGTH_SHORT).show();
     }
-
-    @Override
-    protected void onPause(){
-        super.onPause();
-        Log.i("WorkoutLogActivity", "onPause");
-    }
-
-    @Override
-    public void onBackPressed(){
-        super.onBackPressed();
-    }
-
-
-
-
-
-
 }
