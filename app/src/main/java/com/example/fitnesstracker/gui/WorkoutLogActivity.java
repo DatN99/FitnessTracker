@@ -116,9 +116,6 @@ public class WorkoutLogActivity extends AppCompatActivity implements addSetDialo
         dialog.show(getSupportFragmentManager(), "editSet");
 
 
-        if (SetsList.size() == 2){
-            System.out.println("penis");
-        }
     }
 
     public void removeItem(int position){
@@ -179,9 +176,11 @@ public class WorkoutLogActivity extends AppCompatActivity implements addSetDialo
         Bundle bundle = new Bundle();
         bundle.putParcelableArrayList("Sets List", SetsList);
         SwitchToFinish.putExtras(bundle);
-   //     SetsList.clear();
-    //    saveSets();
         startActivity(SwitchToFinish);
+
+
+        SetsList.clear();
+        saveSets();
 
 
     }
@@ -192,7 +191,6 @@ public class WorkoutLogActivity extends AppCompatActivity implements addSetDialo
 
         Sets newSet = new Sets(name, reps, weight);
         SetsList.add(SetsList.size(), newSet);
-
 
         //udpdate RecyclerView
         mAdapter.notifyItemInserted(SetsList.size());
@@ -234,9 +232,7 @@ public class WorkoutLogActivity extends AppCompatActivity implements addSetDialo
     @Override
     public void onBackPressed(){
         super.onBackPressed();
-
         saveSets();
-
 
     }
 
