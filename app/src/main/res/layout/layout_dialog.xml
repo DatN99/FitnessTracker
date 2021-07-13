@@ -5,30 +5,10 @@
     android:padding="16dp"
     >
 
-    <!--
-    <EditText
-        android:id="@+id/nameEditText"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_centerHorizontal="true"
-        android:hint="NAME" />
 
-    <EditText
-        android:id="@+id/repsEditText"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_below="@id/nameEditText"
-        android:layout_centerHorizontal="true"
-        android:hint="REPS" />
 
-    <EditText
-        android:id="@+id/weightEditText"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_centerHorizontal="true"
-        android:layout_below="@id/repsEditText"
-        android:hint="WEIGHT" />
-    -->
+
+
     <com.google.android.material.textfield.TextInputLayout
         android:id="@+id/nameTextInput"
         android:layout_width="150dp"
@@ -84,6 +64,7 @@
         android:layout_below="@id/weightTextInput"
         android:text="Confirm Set"
         />
+
 
 
 </RelativeLayout>

@@ -23,12 +23,15 @@ public class addSetDialog extends AppCompatDialogFragment {
     private String reps;
     private String weight;
 
+    private Sets set = null;
 
     //Widget variables
     private Button confirmSetButton;
     private TextInputLayout nameInput;
     private TextInputLayout repsInput;
     private TextInputLayout weightInput;
+
+
     private addSetDialogListener listener;
 
     public interface addSetDialogListener{
@@ -44,14 +47,22 @@ public class addSetDialog extends AppCompatDialogFragment {
 
         View view = inflater.inflate(R.layout.layout_dialog, null);
 
+
         builder.setView(view);
         builder.setTitle("Add Set");
+        builder.create();
 
-
-        confirmSetButton = view.findViewById(R.id.confirmSetButton);
         nameInput = view.findViewById(R.id.nameTextInput);
         repsInput = view.findViewById(R.id.repsTextInput);
         weightInput = view.findViewById(R.id.weightTextInput);
+        confirmSetButton = view.findViewById(R.id.confirmSetButton);
+
+        if (set != null){
+            nameInput.getEditText().setText(set.getName());
+            repsInput.getEditText().setText(set.getReps());
+            weightInput.getEditText().setText(set.getWeight());
+        }
+
 
         confirmSetButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -64,7 +75,8 @@ public class addSetDialog extends AppCompatDialogFragment {
             }
         });
 
-        return builder.create();
+
+        return builder.show();
 
     }
 
@@ -149,6 +161,15 @@ public class addSetDialog extends AppCompatDialogFragment {
             weightInput.setError(null);
             return true;
         }
+    }
+
+    public void loadSetInfo(Sets setobj){
+        set = setobj;
+
+    }
+
+    public TextInputLayout getNameTextInput(){
+        return nameInput;
     }
 
 

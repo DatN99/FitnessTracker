@@ -3,6 +3,8 @@ package com.example.fitnesstracker.workout;
 import android.os.Parcel;
 import android.os.Parcelable;
 
+import com.example.fitnesstracker.gui.addSetDialog;
+
 public class Sets implements Parcelable {
 
     //private variables in String format
@@ -10,12 +12,14 @@ public class Sets implements Parcelable {
     private String reps;
     private String weight;
 
+
     //public constructor
     public Sets(String nameStr, String repsStr, String weightStr){
 
         this.name = nameStr;
         this.reps = repsStr;
         this.weight = weightStr;
+
 
     }
 
@@ -72,4 +76,6 @@ public class Sets implements Parcelable {
         dest.writeString(reps);
         dest.writeString(weight);
     }
+
+
 }

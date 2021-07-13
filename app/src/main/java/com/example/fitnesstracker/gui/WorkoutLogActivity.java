@@ -22,7 +22,9 @@ import com.example.fitnesstracker.R;
 import com.example.fitnesstracker.workout.Sets;
 import com.google.android.material.textfield.TextInputLayout;
 import com.google.gson.Gson;
+import com.google.gson.reflect.TypeToken;
 
+import java.lang.reflect.Type;
 import java.util.ArrayList;
 
 public class WorkoutLogActivity extends AppCompatActivity implements addSetDialog.addSetDialogListener {
@@ -45,6 +47,8 @@ public class WorkoutLogActivity extends AppCompatActivity implements addSetDialo
     private final String KEY_RECYCLER_STATE = "recycler_state";
     private static Bundle mBundleRecyclerViewState;
 
+    addSetDialog Dialog;
+
 
 
 
@@ -62,13 +66,27 @@ public class WorkoutLogActivity extends AppCompatActivity implements addSetDialo
 
 
         //RecyclerView Setup
-        mRecyclerView = findViewById(R.id.workoutlogrecyclerView);
-        mRecyclerView.setHasFixedSize(false);
-        mLayoutManager = new LinearLayoutManager(this);
-        mAdapter = new SetAdapter(SetsList);
-        mRecyclerView.setLayoutManager(mLayoutManager);
-        mRecyclerView.setAdapter(mAdapter);
+        buildRecyclerView();
 
+
+
+    }
+
+    private void buildRecyclerView() {
+
+        if (SetsList.size() == 0) {
+            mRecyclerView = findViewById(R.id.workoutlogrecyclerView);
+            mRecyclerView.setHasFixedSize(false);
+            mLayoutManager = new LinearLayoutManager(this);
+            mAdapter = new SetAdapter(SetsList);
+            mRecyclerView.setLayoutManager(mLayoutManager);
+            mRecyclerView.setAdapter(mAdapter);
+        }
+
+        else{
+            mAdapter = new SetAdapter(SetsList);
+            mRecyclerView.setAdapter(mAdapter);
+        }
 
         mAdapter.setOnItemClickListener(new SetAdapter.OnItemClickListener() {
             @Override
@@ -81,9 +99,26 @@ public class WorkoutLogActivity extends AppCompatActivity implements addSetDialo
             public void onDeleteItem(int position){
                 removeItem(position);
             }
+
+            @Override
+            public void onEditItem(int position){
+                editItem(position);
+            }
         });
 
 
+    }
+
+    public void editItem(int position){
+        Sets editSet = SetsList.get(position);
+        addSetDialog dialog = new addSetDialog();
+        dialog.loadSetInfo(editSet);
+        dialog.show(getSupportFragmentManager(), "editSet");
+
+
+        if (SetsList.size() == 2){
+            System.out.println("penis");
+        }
     }
 
     public void removeItem(int position){
@@ -100,7 +135,7 @@ public class WorkoutLogActivity extends AppCompatActivity implements addSetDialo
     //opens fragment when "Add Set" button is clicked
     public void openAddSetFragment(View V){
 
-        addSetDialog Dialog = new addSetDialog();
+        Dialog = new addSetDialog();
         Dialog.show(getSupportFragmentManager(), "addSetDialog");
 
 
@@ -139,11 +174,15 @@ public class WorkoutLogActivity extends AppCompatActivity implements addSetDialo
     //add all sets to workout
     public void openFinishActivity(View V){
 
+
         Intent SwitchToFinish = new Intent(this, FinishActivity.class);
         Bundle bundle = new Bundle();
         bundle.putParcelableArrayList("Sets List", SetsList);
         SwitchToFinish.putExtras(bundle);
+   //     SetsList.clear();
+    //    saveSets();
         startActivity(SwitchToFinish);
+
 
     }
 
@@ -151,8 +190,8 @@ public class WorkoutLogActivity extends AppCompatActivity implements addSetDialo
     @Override
     public void sendSetInfo(String name, String reps, String weight) {
 
-
-        SetsList.add(SetsList.size(), new Sets(name, reps, weight));
+        Sets newSet = new Sets(name, reps, weight);
+        SetsList.add(SetsList.size(), newSet);
 
 
         //udpdate RecyclerView
@@ -161,5 +200,53 @@ public class WorkoutLogActivity extends AppCompatActivity implements addSetDialo
 
 
         Toast.makeText(this, "Set Added", Toast.LENGTH_SHORT).show();
+    }
+
+
+    @Override
+    public void onResume(){
+        super.onResume();
+
+
+        SharedPreferences data = getSharedPreferences("data", MODE_PRIVATE);
+        Gson gson = new Gson();
+        String json = data.getString("All Sets", null);
+        try {
+            if (!json.equals("[]")) {
+
+                Type type = new TypeToken<ArrayList<Sets>>() {
+                }.getType();
+                SetsList = gson.fromJson(json, type);
+
+            }
+        }
+        catch (NullPointerException e)
+        {
+            e.printStackTrace();
+        }
+
+
+        buildRecyclerView();
+
+
+    }
+
+    @Override
+    public void onBackPressed(){
+        super.onBackPressed();
+
+        saveSets();
+
+
+    }
+
+    public void saveSets(){
+        //Store in shared preferences to retrieve data in future
+        SharedPreferences data = getSharedPreferences("data", MODE_PRIVATE);
+        SharedPreferences.Editor editor = data.edit();
+        Gson gson = new Gson();
+        String json = gson.toJson(SetsList);
+        editor.putString("All Sets", json);
+        editor.apply();
     }
 }

@@ -1,5 +1,6 @@
 package com.example.fitnesstracker.gui;
 
+import android.app.Dialog;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -26,9 +27,11 @@ public class SetAdapter extends RecyclerView.Adapter<SetAdapter.SetViewHolder> {
     private static ArrayList<Sets> SetsList;
     private OnItemClickListener mListener;
 
+
     public interface OnItemClickListener {
         void onAddItem(int position);
         void onDeleteItem(int position);
+        void onEditItem(int position);
     }
 
 
@@ -39,6 +42,8 @@ public class SetAdapter extends RecyclerView.Adapter<SetAdapter.SetViewHolder> {
         public TextView weightText;
         public Button addCopyButton;
         public Button removeButton;
+        public Button editButton;
+
 
         public SetViewHolder(View itemView, final OnItemClickListener listener) {
             super(itemView);
@@ -47,6 +52,7 @@ public class SetAdapter extends RecyclerView.Adapter<SetAdapter.SetViewHolder> {
             weightText = itemView.findViewById(R.id.weightTextView);
             addCopyButton = itemView.findViewById(R.id.addCopyButton);
             removeButton = itemView.findViewById(R.id.removeButton);
+            editButton = itemView.findViewById(R.id.editSetButton);
 
 
             addCopyButton.setOnClickListener(new View.OnClickListener() {
@@ -72,6 +78,21 @@ public class SetAdapter extends RecyclerView.Adapter<SetAdapter.SetViewHolder> {
                     }
                 }
             });
+
+
+            editButton.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    if (listener != null){
+                        int position = getBindingAdapterPosition();
+                        if (position != RecyclerView.NO_POSITION){
+                            listener.onEditItem(position);
+                        }
+                    }
+                }
+            });
+
+
 
 
         }
@@ -110,6 +131,9 @@ public class SetAdapter extends RecyclerView.Adapter<SetAdapter.SetViewHolder> {
     public void setOnItemClickListener(OnItemClickListener listener) {
         mListener = listener;
     }
+
+
+
 }
 
 

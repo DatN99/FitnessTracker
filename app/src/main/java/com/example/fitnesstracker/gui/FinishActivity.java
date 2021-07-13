@@ -44,13 +44,14 @@ public class FinishActivity extends AppCompatActivity {
         Intent intent = getIntent();
         SetsList = intent.getExtras().getParcelableArrayList("Sets List");
 
-        workout = new Workout();
-        workout.saveWorkout(SetsList);
+        if (SetsList.size() > 0) {
+            workout = new Workout();
+            workout.saveWorkout(SetsList);
 
-        setWorkoutStr();
+            setWorkoutStr();
 
-        saveWorkout();
-
+            saveWorkout();
+        }
 
 
     }
@@ -92,6 +93,13 @@ public class FinishActivity extends AppCompatActivity {
                 }
             }
         }
+    }
+
+
+    @Override
+    public void onBackPressed(){
+        Intent SwitchToMain = new Intent(this, MainActivity.class);
+        startActivity(SwitchToMain);
     }
 
 
