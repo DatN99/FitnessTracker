@@ -112,8 +112,10 @@ public class WorkoutLogActivity extends AppCompatActivity implements addSetDialo
     public void editItem(int position){
         Sets editSet = SetsList.get(position);
         addSetDialog dialog = new addSetDialog();
-        dialog.loadSetInfo(editSet);
+        dialog.loadSetInfo(editSet, position);
         dialog.show(getSupportFragmentManager(), "editSet");
+
+
 
 
     }
@@ -198,6 +200,22 @@ public class WorkoutLogActivity extends AppCompatActivity implements addSetDialo
 
 
         Toast.makeText(this, "Set Added", Toast.LENGTH_SHORT).show();
+    }
+
+    @Override
+    public void changeSetInfo(String name, String reps, String weight, int position){
+
+        Sets editSet = SetsList.get(position);
+        editSet.setName(name);
+        editSet.setReps(reps);
+        editSet.setWeight(weight);
+
+        mAdapter.notifyItemChanged(position);
+        mLayoutManager.scrollToPosition(SetsList.size());
+
+        Toast.makeText(this, "Set Changed", Toast.LENGTH_SHORT).show();
+
+
     }
 
 

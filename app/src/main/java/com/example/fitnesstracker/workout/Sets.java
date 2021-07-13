@@ -77,5 +77,17 @@ public class Sets implements Parcelable {
         dest.writeString(weight);
     }
 
+    public void setName(String nameStr){
+        this.name = nameStr;
+    }
+
+    public void setReps(String repsStr){
+        this.reps = repsStr;
+    }
+
+    public void setWeight(String weightStr){
+        this.weight = weightStr;
+    }
+
 
 }

@@ -22,6 +22,7 @@ public class PastWorkoutsActivity extends AppCompatActivity {
     ArrayList<String> WorkoutList = new ArrayList<String>();
     ArrayList<String> VolumeList = new ArrayList<String>();
     ArrayList<String> TimeDateList = new ArrayList<String>();
+    ArrayList<String> SetsList = new ArrayList<String>();
 
     private String workoutStr = "";
     private int totalWorkouts = 0;
@@ -44,7 +45,12 @@ public class PastWorkoutsActivity extends AppCompatActivity {
 
         getTimeDateArray();
 
+        getSets();
+
+
         showWorkouts();
+
+
     }
 
     private void showWorkouts() {
@@ -53,7 +59,7 @@ public class PastWorkoutsActivity extends AppCompatActivity {
         mRecyclerView = findViewById(R.id.pastworkoutsrecyclerView);
         mRecyclerView.setHasFixedSize(false);
         mLayoutManager = new LinearLayoutManager(this);
-        mAdapter = new PastWorkoutAdapter(TimeDateList, VolumeList);
+        mAdapter = new PastWorkoutAdapter(TimeDateList, VolumeList, SetsList);
         mRecyclerView.setLayoutManager(mLayoutManager);
         mRecyclerView.setAdapter(mAdapter);
 
@@ -143,6 +149,33 @@ public class PastWorkoutsActivity extends AppCompatActivity {
             }
 
     }
+
+    public void getSets(){
+
+
+        for (String s: WorkoutList){
+            int i = s.indexOf("|") +1;
+
+            String currSet = "";
+            while (i != s.length()-1){
+
+                if (s.charAt(i) == '|') {
+                    currSet += "\n";
+                    i++;
+                }
+
+                currSet += s.charAt(i);
+                i++;
+            }
+            SetsList.add(currSet);
+
+
+        }
+
+
+    }
+
+
 
 
 }

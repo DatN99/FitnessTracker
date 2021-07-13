@@ -25,6 +25,7 @@ public class Workout {
     //Volume is in lbs
     private int volume;
     ArrayList<Sets> Sets;
+    private String SetsStr;
 
 
     public Workout getWorkout(int date) {
@@ -108,5 +109,15 @@ public class Workout {
 
         return monthStr + dateStr + yearStr;
 
+    }
+
+    public void getSetsStr(){
+        SetsStr = "";
+
+        for (Sets s : Sets){
+            SetsStr+= s.getName() + ":   " + s.getReps() + "    " + s.getWeight();
+            SetsStr += "\n";
+
+        }
     }
 }

@@ -33,9 +33,11 @@ public class addSetDialog extends AppCompatDialogFragment {
 
 
     private addSetDialogListener listener;
+    private int position;
 
     public interface addSetDialogListener{
         void sendSetInfo(String name, String reps, String weight);
+        void changeSetInfo(String name, String reps, String weight, int position);
     }
 
     @Override
@@ -67,7 +69,15 @@ public class addSetDialog extends AppCompatDialogFragment {
         confirmSetButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (validateName() && validateReps() && validateWeight()){
+                if (set != null){
+                    if (validateName() && validateReps() && validateWeight()){
+                        listener.changeSetInfo(name, reps, weight, position);
+                        dismiss();
+
+                    }
+                }
+
+                else if (validateName() && validateReps() && validateWeight()){
                     listener.sendSetInfo(name, reps, weight);
                     dismiss();
 
@@ -163,7 +173,8 @@ public class addSetDialog extends AppCompatDialogFragment {
         }
     }
 
-    public void loadSetInfo(Sets setobj){
+    public void loadSetInfo(Sets setobj, int pos){
+        position = pos;
         set = setobj;
 
     }
