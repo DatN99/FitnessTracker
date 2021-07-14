@@ -7,13 +7,13 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
 
+import com.etebarian.meowbottomnavigation.MeowBottomNavigation;
 import com.example.fitnesstracker.R;
+
 
 public class MainActivity extends AppCompatActivity {
     //Widget Variables
-    Button addWorkoutButton;
-    Button pastWorkoutsButton;
-    Button seeGraphButton;
+    MeowBottomNavigation bottomNav;
 
 
     @Override
@@ -22,34 +22,16 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
 
         //Find Widgets
-        addWorkoutButton = findViewById(R.id.addWorkout);
-        pastWorkoutsButton = findViewById(R.id.previousWorkoutsButton);
-        seeGraphButton = findViewById(R.id.graphButton);
+        bottomNav = findViewById(R.id.MeowBottomNav);
+        bottomNav.add(new MeowBottomNavigation.Model(1,R.drawable.ic_home));
+
 
         //Click to add a workout
-        addWorkoutButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
 
-                openWorkoutLogActivity();
-            }
-        });
 
 
         //Click to see past workouts
-        pastWorkoutsButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                openPastWorkoutsActivity();
-            }
-        });
 
-        seeGraphButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                openGraphActivity();
-            }
-        });
 
     }
 
