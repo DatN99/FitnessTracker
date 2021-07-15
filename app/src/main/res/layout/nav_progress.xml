@@ -10,7 +10,7 @@
 
     <include
         android:id="@+id/app_bar_navigation"
-        layout="@layout/activity_progress_graph"
+        layout="@layout/fragment_progress_graph"
         android:layout_width="match_parent"
         android:layout_height="match_parent" />
 

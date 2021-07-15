@@ -13,9 +13,9 @@
 
     <fragment
         android:id="@+id/nav_pastworkouts"
-        android:name="com.example.fitnesstracker.gui.PastWorkoutsActivity"
+        android:name="com.example.fitnesstracker.gui.PastWorkoutsFragment"
         android:label="@string/menu_pastworkouts"
-        tools:layout="@layout/activity_past_workouts" />
+        tools:layout="@layout/fragment_past_workouts" />
 
     <fragment
         android:id="@+id/nav_graph"
