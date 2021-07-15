@@ -1,12 +1,20 @@
 package com.example.fitnesstracker.gui;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.view.GravityCompat;
+import androidx.drawerlayout.widget.DrawerLayout;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import android.content.Intent;
 import android.os.Bundle;
+import android.view.MenuItem;
 
 import com.example.fitnesstracker.R;
+import com.google.android.material.navigation.NavigationView;
+
+import org.jetbrains.annotations.NotNull;
 
 import java.io.BufferedReader;
 import java.io.FileInputStream;
@@ -38,7 +46,7 @@ public class PastWorkoutsActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_past_workouts);
+        setContentView(R.layout.nav_past_workouts);
 
 
         loadWorkouts();
@@ -50,6 +58,23 @@ public class PastWorkoutsActivity extends AppCompatActivity {
 
         showWorkouts();
 
+        NavigationView navigationView = findViewById(R.id.nav_view);
+        navigationView.setNavigationItemSelectedListener(new NavigationView.OnNavigationItemSelectedListener() {
+            @Override
+            public boolean onNavigationItemSelected(@NonNull @NotNull MenuItem item) {
+                if (item.getItemId() == R.id.nav_home){
+                    openMainActivity();
+                }
+
+                else if (item.getItemId() == R.id.nav_progressgraph){
+                    openGraphActivity();
+                }
+
+                DrawerLayout drawerLayout = findViewById(R.id.drawer_layout);
+                drawerLayout.closeDrawer(GravityCompat.START);
+                return true;
+            }
+        });
 
     }
 
@@ -175,7 +200,15 @@ public class PastWorkoutsActivity extends AppCompatActivity {
 
     }
 
+    public void openMainActivity(){
+        Intent intent = new Intent(this, MainActivity.class);
+        startActivity(intent);
+    }
 
+    public void openGraphActivity(){
+        Intent SwitchToGraph = new Intent(this, ProgressGraphActivity.class);
+        startActivity(SwitchToGraph);
+    }
 
 
 }

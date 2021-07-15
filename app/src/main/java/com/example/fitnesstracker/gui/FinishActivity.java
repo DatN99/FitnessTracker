@@ -33,8 +33,6 @@ public class FinishActivity extends AppCompatActivity {
     private String workoutStr;
 
 
-
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);

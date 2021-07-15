@@ -1,10 +1,15 @@
 package com.example.fitnesstracker.gui;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.view.GravityCompat;
+import androidx.drawerlayout.widget.DrawerLayout;
 
+import android.content.Intent;
 import android.graphics.Color;
 import android.icu.util.Calendar;
 import android.os.Bundle;
+import android.view.MenuItem;
 
 import com.example.fitnesstracker.R;
 import com.github.mikephil.charting.charts.LineChart;
@@ -16,6 +21,9 @@ import com.github.mikephil.charting.formatter.IndexAxisValueFormatter;
 import com.github.mikephil.charting.interfaces.datasets.ILineDataSet;
 import com.github.mikephil.charting.listener.OnChartGestureListener;
 import com.github.mikephil.charting.listener.OnChartValueSelectedListener;
+import com.google.android.material.navigation.NavigationView;
+
+import org.jetbrains.annotations.NotNull;
 
 import java.io.BufferedReader;
 import java.io.FileInputStream;
@@ -40,7 +48,26 @@ public class ProgressGraphActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_progress_graph);
+        setContentView(R.layout.nav_progress);
+
+        NavigationView navigationView = findViewById(R.id.nav_view);
+        navigationView.setNavigationItemSelectedListener(new NavigationView.OnNavigationItemSelectedListener() {
+            @Override
+            public boolean onNavigationItemSelected(@NonNull @NotNull MenuItem item) {
+                if (item.getItemId() == R.id.nav_pastworkouts){
+                    openPastWorkoutsActivity();
+                }
+
+                else if (item.getItemId() == R.id.nav_home){
+                    openMainActivity();
+                }
+
+                DrawerLayout drawerLayout = findViewById(R.id.drawer_layout);
+                drawerLayout.closeDrawer(GravityCompat.START);
+                return true;
+            }
+        });
+
 
 
         Chart = findViewById(R.id.progressChartView);
@@ -204,6 +231,17 @@ public class ProgressGraphActivity extends AppCompatActivity {
 
         }
 
+    }
+
+    public void openPastWorkoutsActivity(){
+        Intent SwitchToPastWorkouts = new Intent(this, PastWorkoutsActivity.class);
+        startActivity(SwitchToPastWorkouts);
+
+    }
+
+    public void openMainActivity(){
+        Intent intent = new Intent(this, MainActivity.class);
+        startActivity(intent);
     }
 
 }

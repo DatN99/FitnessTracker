@@ -1,7 +1,9 @@
 package com.example.fitnesstracker.gui;
-
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.cardview.widget.CardView;
+import androidx.core.view.GravityCompat;
+import androidx.drawerlayout.widget.DrawerLayout;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
 import androidx.recyclerview.widget.LinearLayoutManager;
@@ -13,6 +15,7 @@ import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.os.Parcelable;
 import android.util.Log;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.FrameLayout;
@@ -20,9 +23,12 @@ import android.widget.Toast;
 
 import com.example.fitnesstracker.R;
 import com.example.fitnesstracker.workout.Sets;
+import com.google.android.material.navigation.NavigationView;
 import com.google.android.material.textfield.TextInputLayout;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
+
+import org.jetbrains.annotations.NotNull;
 
 import java.lang.reflect.Type;
 import java.util.ArrayList;
@@ -55,7 +61,7 @@ public class WorkoutLogActivity extends AppCompatActivity implements addSetDialo
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_workout_log);
+        setContentView(R.layout.nav_progress);
 
         //finding Fragment layout
         addSetFragment1 = findViewById(R.id.addSetFragment);
@@ -67,6 +73,27 @@ public class WorkoutLogActivity extends AppCompatActivity implements addSetDialo
 
         //RecyclerView Setup
         buildRecyclerView();
+
+        NavigationView navigationView = findViewById(R.id.nav_view);
+        navigationView.setNavigationItemSelectedListener(new NavigationView.OnNavigationItemSelectedListener() {
+            @Override
+            public boolean onNavigationItemSelected(@NonNull @NotNull MenuItem item) {
+                if (item.getItemId() == R.id.nav_pastworkouts){
+                    openPastWorkoutsActivity();
+                }
+
+                else if (item.getItemId() == R.id.nav_home){
+                    openMainActivity();
+                }
+
+
+                DrawerLayout drawerLayout = findViewById(R.id.drawer_layout);
+                drawerLayout.closeDrawer(GravityCompat.START);
+                return true;
+            }
+        });
+
+
 
 
 
@@ -132,42 +159,15 @@ public class WorkoutLogActivity extends AppCompatActivity implements addSetDialo
 
 
     //opens fragment when "Add Set" button is clicked
-    public void openAddSetFragment(View V){
+    public void openDialog(View V){
 
         Dialog = new addSetDialog();
         Dialog.show(getSupportFragmentManager(), "addSetDialog");
 
 
-        /**
-        addSetFragment fragment = addSetFragment.newInstance();
-        FragmentManager fragmentManager = getSupportFragmentManager();
-        FragmentTransaction transaction = fragmentManager.beginTransaction();
-        transaction.addToBackStack(null);
-        transaction.add(R.id.addSetFragment, fragment, "New Fragment").commit();
-        */
 
     }
 
-
-    //called after user selects "Confirm Set"
-   // @Override
-    public void onFragmentInteraction(Sets CurrSet) {
-
-        /**
-        //add new CurrSet to SetsList
-        SetsList.add(SetsList.size(), CurrSet);
-
-
-        //udpdate RecyclerView
-        mAdapter.notifyItemInserted(SetsList.size());
-        mLayoutManager.scrollToPosition(SetsList.size());
-
-
-        Toast.makeText(this, "Set Added", Toast.LENGTH_SHORT).show();
-        */
-
-
-    }
 
 
     //add all sets to workout
@@ -263,4 +263,15 @@ public class WorkoutLogActivity extends AppCompatActivity implements addSetDialo
         editor.putString("All Sets", json);
         editor.apply();
     }
+
+    public void openMainActivity(){
+        Intent intent = new Intent(this, MainActivity.class);
+        startActivity(intent);
+    }
+
+    public void openPastWorkoutsActivity(){
+        Intent intent = new Intent(this, PastWorkoutsActivity.class);
+        startActivity(intent);
+    }
+
 }

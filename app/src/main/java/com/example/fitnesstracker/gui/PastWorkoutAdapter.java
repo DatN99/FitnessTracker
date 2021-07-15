@@ -34,7 +34,6 @@ public class PastWorkoutAdapter extends RecyclerView.Adapter<PastWorkoutAdapter.
 
 
 
-
         public PastWorkoutViewHolder(View itemView) {
             super(itemView);
 
