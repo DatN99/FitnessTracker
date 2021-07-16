@@ -67,9 +67,13 @@ public class MainActivity extends AppCompatActivity implements addSetDialog.addS
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.nav_activity_startworkout);
+        setContentView(R.layout.nav_activity_main);
 
 
+        /**START HERE
+         * YOU NEED TO INCORPORATE THE NEW FRAGMENT START ACTIVITY
+         * STARTING FROM ABOVE WITH SETCONTENTVIEW
+         */
         startWorkout = findViewById(R.id.startWorkoutButton);
         startWorkout.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -303,7 +307,7 @@ public class MainActivity extends AppCompatActivity implements addSetDialog.addS
         startWorkout.setVisibility(View.VISIBLE);
 
         if (startWorkout.getVisibility() == View.INVISIBLE){
-            setContentView(R.layout.nav_activity_startworkout);
+            setContentView(R.layout.nav_activity_main);
 
         }
 
