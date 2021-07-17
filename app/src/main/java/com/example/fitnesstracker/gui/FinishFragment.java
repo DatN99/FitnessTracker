@@ -1,6 +1,8 @@
 package com.example.fitnesstracker.gui;
 
+import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 
 import androidx.fragment.app.Fragment;
@@ -13,6 +15,7 @@ import android.widget.Toast;
 import com.example.fitnesstracker.R;
 import com.example.fitnesstracker.workout.Sets;
 import com.example.fitnesstracker.workout.Workout;
+import com.google.gson.Gson;
 
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
@@ -33,6 +36,8 @@ public class FinishFragment extends Fragment {
     private static final String ALL_WORKOUTS = "workouts.txt";
     private String workoutStr;
 
+    private MainActivityListener listener;
+
 
 
     public FinishFragment() {
@@ -44,6 +49,9 @@ public class FinishFragment extends Fragment {
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         view = inflater.inflate(R.layout.nav_finish, container, false);
+
+        listener.updateWorkoutState();
+
 
         if (getArguments() != null){
             SetsList = getArguments().getParcelableArrayList("Sets List");
@@ -58,6 +66,9 @@ public class FinishFragment extends Fragment {
 
             saveWorkout();
         }
+
+        clearSets();
+
 
 
         return view;
@@ -100,6 +111,27 @@ public class FinishFragment extends Fragment {
                 }
             }
         }
+    }
+
+    @Override
+    public void onAttach(Context context) {
+        super.onAttach(context);
+
+        try {
+            listener = (MainActivityListener) getActivity();
+        } catch (ClassCastException e){
+            throw new ClassCastException(context.toString() + "must implement MainActivityListener");
+        }
+    }
+
+    public void clearSets(){
+        SharedPreferences data = getActivity().getSharedPreferences("data", getActivity().MODE_PRIVATE);
+        SharedPreferences.Editor editor = data.edit();
+        Gson gson = new Gson();
+        SetsList.clear();
+        String json = gson.toJson(SetsList);
+        editor.putString("All Sets", json);
+        editor.apply();
     }
 
 

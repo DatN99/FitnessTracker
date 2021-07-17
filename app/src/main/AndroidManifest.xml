@@ -17,10 +17,6 @@
             android:name=".gui.MainNavActivity"
             android:label="@string/title_activity_main_nav"
             android:theme="@style/Theme.FitnessTracker.NoActionBar" />
-        <activity android:name=".gui.ProgressGraphActivity" />
-        <activity android:name=".gui.PastWorkoutsActivity" />
-        <activity android:name=".gui.FinishActivity" />
-        <activity android:name=".gui.WorkoutLogActivity" />
         <activity android:name=".gui.MainActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />

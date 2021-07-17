@@ -95,7 +95,7 @@ public class addSetDialog extends AppCompatDialogFragment {
         super.onAttach(context);
 
         try {
-            listener = (addSetDialogListener) context;
+            listener = (addSetDialogListener) getParentFragment();
         } catch (ClassCastException e){
             throw new ClassCastException(context.toString() + "must implement addSetDialogListener");
         }

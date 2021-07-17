@@ -1,39 +1,38 @@
 package com.example.fitnesstracker.gui;
-import androidx.annotation.NonNull;
-import androidx.appcompat.app.AppCompatActivity;
-import androidx.cardview.widget.CardView;
-import androidx.core.view.GravityCompat;
-import androidx.drawerlayout.widget.DrawerLayout;
-import androidx.fragment.app.FragmentManager;
-import androidx.fragment.app.FragmentTransaction;
+
+import android.content.Context;
+import android.content.SharedPreferences;
+import android.os.Bundle;
+
+import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-
-import android.content.Intent;
-import android.content.SharedPreferences;
-import android.os.Bundle;
-import android.os.Parcelable;
-import android.util.Log;
-import android.view.MenuItem;
+import android.view.LayoutInflater;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.FrameLayout;
 import android.widget.Toast;
 
+import com.etebarian.meowbottomnavigation.MeowBottomNavigation;
 import com.example.fitnesstracker.R;
 import com.example.fitnesstracker.workout.Sets;
-import com.google.android.material.navigation.NavigationView;
-import com.google.android.material.textfield.TextInputLayout;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
-
-import org.jetbrains.annotations.NotNull;
 
 import java.lang.reflect.Type;
 import java.util.ArrayList;
 
-public class WorkoutLogActivity extends AppCompatActivity implements addSetDialog.addSetDialogListener {
+
+public class WorkoutLogFragment extends Fragment implements addSetDialog.addSetDialogListener{
+
+    View view;
+
+    private Button startWorkout;
+    private boolean workoutStarted;
+    //Widget Variables
+    MeowBottomNavigation bottomNav;
 
     //Widget variables
     private Button addSet;
@@ -57,54 +56,51 @@ public class WorkoutLogActivity extends AppCompatActivity implements addSetDialo
 
 
 
+    public WorkoutLogFragment() {
+        // Required empty public constructor
+    }
+
+
 
     @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        setContentView(R.layout.nav_progress);
+    public View onCreateView(LayoutInflater inflater, ViewGroup container,
+                             Bundle savedInstanceState) {
+        view = inflater.inflate(R.layout.fragment_workout_log, container, false);
 
-        //finding Fragment layout
-        addSetFragment1 = findViewById(R.id.addSetFragment);
 
         //finding widgets
-        addSet = findViewById(R.id.addSetButton);
-        finishWorkout = findViewById(R.id.finishButton);
+        addSet = view.findViewById(R.id.addSetButton);
+        finishWorkout = view.findViewById(R.id.finishButton);
 
+
+        addSet.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                openDialog();
+            }
+        });
+
+        finishWorkout.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                finishWorkout();
+            }
+        });
 
         //RecyclerView Setup
         buildRecyclerView();
 
-        NavigationView navigationView = findViewById(R.id.nav_view);
-        navigationView.setNavigationItemSelectedListener(new NavigationView.OnNavigationItemSelectedListener() {
-            @Override
-            public boolean onNavigationItemSelected(@NonNull @NotNull MenuItem item) {
-                if (item.getItemId() == R.id.nav_pastworkouts){
-                    openPastWorkoutsActivity();
-                }
-
-                else if (item.getItemId() == R.id.nav_home){
-                    openMainActivity();
-                }
 
 
-                DrawerLayout drawerLayout = findViewById(R.id.drawer_layout);
-                drawerLayout.closeDrawer(GravityCompat.START);
-                return true;
-            }
-        });
-
-
-
-
-
+        return view;
     }
 
     private void buildRecyclerView() {
 
         if (SetsList.size() == 0) {
-            mRecyclerView = findViewById(R.id.workoutlogrecyclerView);
+            mRecyclerView = view.findViewById(R.id.workoutlogrecyclerView);
             mRecyclerView.setHasFixedSize(false);
-            mLayoutManager = new LinearLayoutManager(this);
+            mLayoutManager = new LinearLayoutManager(getContext());
             mAdapter = new SetAdapter(SetsList);
             mRecyclerView.setLayoutManager(mLayoutManager);
             mRecyclerView.setAdapter(mAdapter);
@@ -140,9 +136,7 @@ public class WorkoutLogActivity extends AppCompatActivity implements addSetDialo
         Sets editSet = SetsList.get(position);
         addSetDialog dialog = new addSetDialog();
         dialog.loadSetInfo(editSet, position);
-        dialog.show(getSupportFragmentManager(), "editSet");
-
-
+        dialog.show(getChildFragmentManager(), "editSet");
 
 
     }
@@ -159,11 +153,10 @@ public class WorkoutLogActivity extends AppCompatActivity implements addSetDialo
 
 
     //opens fragment when "Add Set" button is clicked
-    public void openDialog(View V){
+    public void openDialog(){
 
         Dialog = new addSetDialog();
-        Dialog.show(getSupportFragmentManager(), "addSetDialog");
-
+        Dialog.show(getChildFragmentManager(), "addSetDialog");
 
 
     }
@@ -171,18 +164,19 @@ public class WorkoutLogActivity extends AppCompatActivity implements addSetDialo
 
 
     //add all sets to workout
-    public void openFinishActivity(View V){
+    public void finishWorkout(){
 
-
-        Intent SwitchToFinish = new Intent(this, FinishActivity.class);
+        FinishFragment fragment = new FinishFragment();
         Bundle bundle = new Bundle();
         bundle.putParcelableArrayList("Sets List", SetsList);
-        SwitchToFinish.putExtras(bundle);
-        startActivity(SwitchToFinish);
+        fragment.setArguments(bundle);
 
+        getActivity().getSupportFragmentManager()
+                .beginTransaction()
+                .replace(R.id.fragment_container, fragment, "FinishFragment")
+                .addToBackStack(null)
+                .commit();
 
-        SetsList.clear();
-        saveSets();
 
 
     }
@@ -199,7 +193,7 @@ public class WorkoutLogActivity extends AppCompatActivity implements addSetDialo
         mLayoutManager.scrollToPosition(SetsList.size());
 
 
-        Toast.makeText(this, "Set Added", Toast.LENGTH_SHORT).show();
+        Toast.makeText(getContext(), "Set Added", Toast.LENGTH_SHORT).show();
     }
 
     @Override
@@ -213,7 +207,7 @@ public class WorkoutLogActivity extends AppCompatActivity implements addSetDialo
         mAdapter.notifyItemChanged(position);
         mLayoutManager.scrollToPosition(SetsList.size());
 
-        Toast.makeText(this, "Set Changed", Toast.LENGTH_SHORT).show();
+        Toast.makeText(getContext(), "Set Changed", Toast.LENGTH_SHORT).show();
 
 
     }
@@ -221,10 +215,17 @@ public class WorkoutLogActivity extends AppCompatActivity implements addSetDialo
 
     @Override
     public void onResume(){
-        super.onResume();
+    super.onResume();
 
 
-        SharedPreferences data = getSharedPreferences("data", MODE_PRIVATE);
+   //     loadSets();
+
+  //      buildRecyclerView();
+    }
+
+    public void loadSets(){
+
+        SharedPreferences data = getActivity().getSharedPreferences("data", getActivity().MODE_PRIVATE);
         Gson gson = new Gson();
         String json = data.getString("All Sets", null);
         try {
@@ -235,28 +236,18 @@ public class WorkoutLogActivity extends AppCompatActivity implements addSetDialo
                 SetsList = gson.fromJson(json, type);
 
             }
-        }
-        catch (NullPointerException e)
-        {
+        } catch (NullPointerException e) {
             e.printStackTrace();
         }
-
-
-        buildRecyclerView();
 
 
     }
 
     @Override
-    public void onBackPressed(){
-        super.onBackPressed();
-        saveSets();
+    public void onPause(){
+        super.onPause();
 
-    }
-
-    public void saveSets(){
-        //Store in shared preferences to retrieve data in future
-        SharedPreferences data = getSharedPreferences("data", MODE_PRIVATE);
+        SharedPreferences data = getActivity().getSharedPreferences("data", getActivity().MODE_PRIVATE);
         SharedPreferences.Editor editor = data.edit();
         Gson gson = new Gson();
         String json = gson.toJson(SetsList);
@@ -264,14 +255,7 @@ public class WorkoutLogActivity extends AppCompatActivity implements addSetDialo
         editor.apply();
     }
 
-    public void openMainActivity(){
-        Intent intent = new Intent(this, MainActivity.class);
-        startActivity(intent);
-    }
 
-    public void openPastWorkoutsActivity(){
-        Intent intent = new Intent(this, PastWorkoutsActivity.class);
-        startActivity(intent);
-    }
+
 
 }

@@ -33,35 +33,10 @@ import java.lang.reflect.Type;
 import java.util.ArrayList;
 
 
-public class MainActivity extends AppCompatActivity implements addSetDialog.addSetDialogListener{
+public class MainActivity extends AppCompatActivity implements MainActivityListener{
 
 
-    private Button startWorkout;
-    private boolean workoutStarted;
-    //Widget Variables
-    MeowBottomNavigation bottomNav;
-
-    //Widget variables
-    private Button addSet;
-    private Button finishWorkout;
-    private FrameLayout addSetFragment1;
-
-    //RecyclerView variables
-    private RecyclerView mRecyclerView;
-    private SetAdapter mAdapter;
-    private RecyclerView.LayoutManager mLayoutManager;
-
-    //Sets Variables
-    ArrayList<Sets> SetsList = new ArrayList<>();
-
-
-
-    private final String KEY_RECYCLER_STATE = "recycler_state";
-    private static Bundle mBundleRecyclerViewState;
-
-    addSetDialog Dialog;
-
-
+    private boolean workoutStarted = false;
 
 
     @Override
@@ -70,29 +45,12 @@ public class MainActivity extends AppCompatActivity implements addSetDialog.addS
         setContentView(R.layout.nav_activity_main);
 
 
-        /**START HERE
-         * YOU NEED TO INCORPORATE THE NEW FRAGMENT START ACTIVITY
-         * STARTING FROM ABOVE WITH SETCONTENTVIEW
-         */
-        startWorkout = findViewById(R.id.startWorkoutButton);
-        startWorkout.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                workoutStarted = true;
-                openWorkoutFrame();
-
-            }
-        });
-
-
-
 
         NavigationView navigationView = findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(new NavigationView.OnNavigationItemSelectedListener() {
             @Override
             public boolean onNavigationItemSelected(@NonNull @NotNull MenuItem item) {
 
-                startWorkout.setVisibility(View.INVISIBLE);
 
                 if (item.getItemId() == R.id.nav_pastworkouts){
 
@@ -104,13 +62,8 @@ public class MainActivity extends AppCompatActivity implements addSetDialog.addS
                 }
 
                 else if (item.getItemId() == R.id.nav_home){
-                    startWorkout.setVisibility(View.VISIBLE);
+                    onResume();
 
-                    FragmentManager fm = getSupportFragmentManager();
-
-                    for(int i = 0; i < fm.getBackStackEntryCount(); ++i) {
-                        fm.popBackStack();
-                    }
                 }
 
                 DrawerLayout drawerLayout = findViewById(R.id.drawer_layout);
@@ -120,35 +73,37 @@ public class MainActivity extends AppCompatActivity implements addSetDialog.addS
         });
 
 
+    }
+
+    @Override
+    public void updateWorkoutState(){
+        workoutStarted = !workoutStarted;
+
+        if (workoutStarted){
+            openWorkoutFragment();
+        }
 
 
     }
 
-    private void openWorkoutFrame(){
-        setContentView(R.layout.nav_activity_main);
 
-        //finding widgets
-        addSet = findViewById(R.id.addSetButton);
-        finishWorkout = findViewById(R.id.finishButton);
-
-
-        addSet.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                openDialog();
-            }
-        });
-
-        finishWorkout.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                openFinishActivity();
-            }
-        });
-        //RecyclerView Setup
-        buildRecyclerView();
+    private void openStartWorkoutFragment(){
+        getSupportFragmentManager()
+                .beginTransaction()
+                .replace(R.id.fragment_container, new StartWorkoutFragment())
+                .addToBackStack(null)
+                .commit();
 
     }
+
+    private void openWorkoutFragment(){
+        getSupportFragmentManager()
+                .beginTransaction()
+                .replace(R.id.fragment_container, new WorkoutLogFragment(), "WorkoutLogFragment")
+                .addToBackStack(null)
+                .commit();
+    }
+
 
     public void openPastWorkoutsFragment(){
 
@@ -160,6 +115,7 @@ public class MainActivity extends AppCompatActivity implements addSetDialog.addS
 
     }
 
+
     public void openGraphFragment(){
         getSupportFragmentManager()
                 .beginTransaction()
@@ -169,191 +125,36 @@ public class MainActivity extends AppCompatActivity implements addSetDialog.addS
 
     }
 
-
-    private void buildRecyclerView() {
-
-        if (SetsList.size() == 0) {
-            mRecyclerView = findViewById(R.id.workoutlogrecyclerView);
-            mRecyclerView.setHasFixedSize(false);
-            mLayoutManager = new LinearLayoutManager(this);
-            mAdapter = new SetAdapter(SetsList);
-            mRecyclerView.setLayoutManager(mLayoutManager);
-            mRecyclerView.setAdapter(mAdapter);
-        }
-
-        else{
-            mAdapter = new SetAdapter(SetsList);
-            mRecyclerView.setAdapter(mAdapter);
-        }
-
-        mAdapter.setOnItemClickListener(new SetAdapter.OnItemClickListener() {
-            @Override
-            public void onAddItem(int position) {
-                Sets copy = SetsList.get(position);
-                addCopy(position+1, copy);
-            }
-
-            @Override
-            public void onDeleteItem(int position){
-                removeItem(position);
-            }
-
-            @Override
-            public void onEditItem(int position){
-                editItem(position);
-            }
-        });
-
-
-    }
-
-    public void editItem(int position){
-        Sets editSet = SetsList.get(position);
-        addSetDialog dialog = new addSetDialog();
-        dialog.loadSetInfo(editSet, position);
-        dialog.show(getSupportFragmentManager(), "editSet");
-
-
-    }
-
-    public void removeItem(int position){
-        SetsList.remove(position);
-        mAdapter.notifyItemRemoved(position);
-    }
-
-    public void addCopy(int position, Sets copy){
-        SetsList.add(position, copy);
-        mAdapter.notifyItemInserted(position);
-    }
-
-
-    //opens fragment when "Add Set" button is clicked
-    public void openDialog(){
-
-        Dialog = new addSetDialog();
-        Dialog.show(getSupportFragmentManager(), "addSetDialog");
-
-
-
-    }
-
-
-
-    //add all sets to workout
-    public void openFinishActivity(){
-
-        /**
-        Intent SwitchToFinish = new Intent(this, FinishActivity.class);
-        Bundle bundle = new Bundle();
-        bundle.putParcelableArrayList("Sets List", SetsList);
-        SwitchToFinish.putExtras(bundle);
-        startActivity(SwitchToFinish);
-
-        */
-        FinishFragment fragment = new FinishFragment();
-        Bundle bundle = new Bundle();
-        bundle.putParcelableArrayList("Sets List", SetsList);
-        fragment.setArguments(bundle);
-
-
-        getSupportFragmentManager()
-                .beginTransaction()
-                .replace(R.id.fragment_container, fragment)
-                .addToBackStack(null)
-                .commit();
-
-
-
-
-
-    }
-
-
-    @Override
-    public void sendSetInfo(String name, String reps, String weight) {
-
-        Sets newSet = new Sets(name, reps, weight);
-        SetsList.add(SetsList.size(), newSet);
-
-        //udpdate RecyclerView
-        mAdapter.notifyItemInserted(SetsList.size());
-        mLayoutManager.scrollToPosition(SetsList.size());
-
-
-        Toast.makeText(this, "Set Added", Toast.LENGTH_SHORT).show();
-    }
-
-    @Override
-    public void changeSetInfo(String name, String reps, String weight, int position){
-
-        Sets editSet = SetsList.get(position);
-        editSet.setName(name);
-        editSet.setReps(reps);
-        editSet.setWeight(weight);
-
-        mAdapter.notifyItemChanged(position);
-        mLayoutManager.scrollToPosition(SetsList.size());
-
-        Toast.makeText(this, "Set Changed", Toast.LENGTH_SHORT).show();
-
-
-    }
-
-
     @Override
     public void onResume(){
         super.onResume();
 
-        startWorkout.setVisibility(View.VISIBLE);
-
-        if (startWorkout.getVisibility() == View.INVISIBLE){
-            setContentView(R.layout.nav_activity_main);
-
+        if (!workoutStarted) {
+            openStartWorkoutFragment();
         }
 
-
-        if (workoutStarted) {
-            SharedPreferences data = getSharedPreferences("data", MODE_PRIVATE);
-            Gson gson = new Gson();
-            String json = data.getString("All Sets", null);
-            try {
-                if (!json.equals("[]")) {
-
-                    Type type = new TypeToken<ArrayList<Sets>>() {
-                    }.getType();
-                    SetsList = gson.fromJson(json, type);
-
-                }
-            } catch (NullPointerException e) {
-                e.printStackTrace();
-            }
-
-
-            buildRecyclerView();
+        else{
+            openWorkoutFragment();
         }
 
     }
+
 
     @Override
     public void onBackPressed(){
-        super.onBackPressed();
-        saveSets();
 
-    }
+        if (getSupportFragmentManager().findFragmentByTag("WorkoutLogFragment") != null && getSupportFragmentManager().findFragmentByTag("WorkoutLogFragment").isVisible()){
 
-    public void saveSets(){
-        //Store in shared preferences to retrieve data in future
-        SharedPreferences data = getSharedPreferences("data", MODE_PRIVATE);
-        SharedPreferences.Editor editor = data.edit();
-        Gson gson = new Gson();
-        String json = gson.toJson(SetsList);
-        editor.putString("All Sets", json);
-        editor.apply();
-    }
+        }
 
-    public void openMainActivity(){
-        Intent intent = new Intent(this, MainActivity.class);
-        startActivity(intent);
+        else if (getSupportFragmentManager().findFragmentByTag("FinishFragment") != null && getSupportFragmentManager().findFragmentByTag("FinishFragment").isVisible()){
+
+        }
+        else{
+            super.onBackPressed();
+
+        }
+
     }
 
 
