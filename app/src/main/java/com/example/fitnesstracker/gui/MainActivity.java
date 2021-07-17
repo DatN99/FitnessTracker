@@ -160,7 +160,7 @@ public class MainActivity extends AppCompatActivity implements MainActivityListe
         }
 
         else if (getSupportFragmentManager().findFragmentByTag("FinishFragment") != null && getSupportFragmentManager().findFragmentByTag("FinishFragment").isVisible()){
-
+            openStartWorkoutFragment();
         }
 
         else{

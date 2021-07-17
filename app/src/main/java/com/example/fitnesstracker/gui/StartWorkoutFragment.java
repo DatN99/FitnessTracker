@@ -34,7 +34,6 @@ public class StartWorkoutFragment extends Fragment {
             @Override
             public void onClick(View v) {
                 listener.updateWorkoutState();
-                startWorkout.setText("Continue Workout");
             }
         });
 
