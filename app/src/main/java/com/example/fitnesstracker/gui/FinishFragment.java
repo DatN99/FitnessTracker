@@ -50,24 +50,40 @@ public class FinishFragment extends Fragment {
         // Inflate the layout for this fragment
         view = inflater.inflate(R.layout.nav_finish, container, false);
 
-        listener.updateWorkoutState();
+        boolean workoutStarted = listener.getWorkoutState();
 
 
-        if (getArguments() != null){
-            SetsList = getArguments().getParcelableArrayList("Sets List");
+        if (!workoutStarted){
+            getActivity().getSupportFragmentManager()
+                    .beginTransaction()
+                    .replace(R.id.fragment_container, new StartWorkoutFragment())
+                    .addToBackStack(null)
+                    .commit();
+        }
+
+        else {
+
+            listener.updateWorkoutState();
+
+
+            if (getArguments() != null) {
+                SetsList = getArguments().getParcelableArrayList("Sets List");
+            }
+
+
+            if (SetsList.size() > 0) {
+                workout = new Workout();
+                workout.saveWorkout(SetsList);
+
+                setWorkoutStr();
+
+                saveWorkout();
+            }
+
+            clearSets();
         }
 
 
-        if (SetsList.size() > 0) {
-            workout = new Workout();
-            workout.saveWorkout(SetsList);
-
-            setWorkoutStr();
-
-            saveWorkout();
-        }
-
-        clearSets();
 
 
 
@@ -133,6 +149,8 @@ public class FinishFragment extends Fragment {
         editor.putString("All Sets", json);
         editor.apply();
     }
+
+
 
 
 }

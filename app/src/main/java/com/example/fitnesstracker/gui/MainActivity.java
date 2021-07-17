@@ -5,6 +5,7 @@ import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.view.GravityCompat;
 import androidx.drawerlayout.widget.DrawerLayout;
+import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
 import androidx.recyclerview.widget.LinearLayoutManager;
@@ -37,6 +38,7 @@ public class MainActivity extends AppCompatActivity implements MainActivityListe
 
 
     private boolean workoutStarted = false;
+
 
 
     @Override
@@ -85,6 +87,15 @@ public class MainActivity extends AppCompatActivity implements MainActivityListe
 
     }
 
+    @Override
+    public boolean getWorkoutState(){
+        if (workoutStarted){
+            return true;
+        }
+
+        return false;
+    }
+
 
     private void openStartWorkoutFragment(){
         getSupportFragmentManager()
@@ -98,8 +109,8 @@ public class MainActivity extends AppCompatActivity implements MainActivityListe
     private void openWorkoutFragment(){
         getSupportFragmentManager()
                 .beginTransaction()
-                .replace(R.id.fragment_container, new WorkoutLogFragment(), "WorkoutLogFragment")
-                .addToBackStack(null)
+                .replace(R.id.fragment_container, new WorkoutLogFragment(), "WorkoutFragment")
+                .addToBackStack("WorkoutFragment")
                 .commit();
     }
 
@@ -142,19 +153,25 @@ public class MainActivity extends AppCompatActivity implements MainActivityListe
     @Override
     public void onBackPressed(){
 
-        if (getSupportFragmentManager().findFragmentByTag("WorkoutLogFragment") != null && getSupportFragmentManager().findFragmentByTag("WorkoutLogFragment").isVisible()){
+
+
+        if (getSupportFragmentManager().findFragmentByTag("WorkoutFragment") != null && getSupportFragmentManager().findFragmentByTag("WorkoutFragment").isVisible()){
 
         }
 
         else if (getSupportFragmentManager().findFragmentByTag("FinishFragment") != null && getSupportFragmentManager().findFragmentByTag("FinishFragment").isVisible()){
 
         }
+
         else{
             super.onBackPressed();
 
         }
 
+
     }
+
+
 
 
 

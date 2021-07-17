@@ -5,6 +5,7 @@ import android.content.SharedPreferences;
 import android.os.Bundle;
 
 import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentManager;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -166,10 +167,14 @@ public class WorkoutLogFragment extends Fragment implements addSetDialog.addSetD
         bundle.putParcelableArrayList("Sets List", SetsList);
         fragment.setArguments(bundle);
 
+
+
+
+
         getActivity().getSupportFragmentManager()
                 .beginTransaction()
                 .replace(R.id.fragment_container, fragment, "FinishFragment")
-                .addToBackStack(null)
+                .addToBackStack("FinishFragment")
                 .commit();
 
 
