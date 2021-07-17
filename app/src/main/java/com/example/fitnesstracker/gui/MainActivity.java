@@ -45,7 +45,6 @@ public class MainActivity extends AppCompatActivity implements MainActivityListe
         setContentView(R.layout.nav_activity_main);
 
 
-
         NavigationView navigationView = findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(new NavigationView.OnNavigationItemSelectedListener() {
             @Override

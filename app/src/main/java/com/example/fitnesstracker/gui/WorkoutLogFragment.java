@@ -87,6 +87,7 @@ public class WorkoutLogFragment extends Fragment implements addSetDialog.addSetD
             }
         });
 
+        loadSets();
         //RecyclerView Setup
         buildRecyclerView();
 
@@ -97,19 +98,13 @@ public class WorkoutLogFragment extends Fragment implements addSetDialog.addSetD
 
     private void buildRecyclerView() {
 
-        if (SetsList.size() == 0) {
-            mRecyclerView = view.findViewById(R.id.workoutlogrecyclerView);
-            mRecyclerView.setHasFixedSize(false);
-            mLayoutManager = new LinearLayoutManager(getContext());
-            mAdapter = new SetAdapter(SetsList);
-            mRecyclerView.setLayoutManager(mLayoutManager);
-            mRecyclerView.setAdapter(mAdapter);
-        }
+        mRecyclerView = view.findViewById(R.id.workoutlogrecyclerView);
+        mRecyclerView.setHasFixedSize(false);
+        mLayoutManager = new LinearLayoutManager(getContext());
+        mAdapter = new SetAdapter(SetsList);
+        mRecyclerView.setLayoutManager(mLayoutManager);
+        mRecyclerView.setAdapter(mAdapter);
 
-        else{
-            mAdapter = new SetAdapter(SetsList);
-            mRecyclerView.setAdapter(mAdapter);
-        }
 
         mAdapter.setOnItemClickListener(new SetAdapter.OnItemClickListener() {
             @Override
@@ -213,15 +208,6 @@ public class WorkoutLogFragment extends Fragment implements addSetDialog.addSetD
     }
 
 
-    @Override
-    public void onResume(){
-    super.onResume();
-
-
-   //     loadSets();
-
-  //      buildRecyclerView();
-    }
 
     public void loadSets(){
 
