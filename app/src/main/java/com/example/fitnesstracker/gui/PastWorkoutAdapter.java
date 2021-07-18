@@ -1,23 +1,21 @@
 package com.example.fitnesstracker.gui;
 
-import android.transition.AutoTransition;
-import android.transition.TransitionManager;
+
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.TextView;
 
-import androidx.annotation.NonNull;
 import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.fitnesstracker.R;
-import com.example.fitnesstracker.workout.Sets;
 
 import java.util.ArrayList;
 
 public class PastWorkoutAdapter extends RecyclerView.Adapter<PastWorkoutAdapter.PastWorkoutViewHolder>{
+
     private static ArrayList<String> TimeDateList;
     private static ArrayList<String> VolumeList;
     private static ArrayList<String> SetsList;
@@ -31,7 +29,6 @@ public class PastWorkoutAdapter extends RecyclerView.Adapter<PastWorkoutAdapter.
 
         Button expandButton;
         ConstraintLayout expandableLayout;
-
 
 
         public PastWorkoutViewHolder(View itemView) {
@@ -76,7 +73,6 @@ public class PastWorkoutAdapter extends RecyclerView.Adapter<PastWorkoutAdapter.
     }
 
 
-
     @Override
     public PastWorkoutViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
 
@@ -88,17 +84,9 @@ public class PastWorkoutAdapter extends RecyclerView.Adapter<PastWorkoutAdapter.
     @Override
     public void onBindViewHolder(PastWorkoutAdapter.PastWorkoutViewHolder holder, int position) {
 
-
-
-
         holder.TimeDate.setText(TimeDateList.get(position));
         holder.Volume.setText(VolumeList.get(position));
         holder.SetInfo.setText(SetsList.get(position));
-
-
-
-
-
 
     }
 

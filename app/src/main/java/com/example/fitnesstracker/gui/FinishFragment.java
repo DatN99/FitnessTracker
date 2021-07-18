@@ -1,7 +1,6 @@
 package com.example.fitnesstracker.gui;
 
 import android.content.Context;
-import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 
@@ -39,16 +38,16 @@ public class FinishFragment extends Fragment {
     private MainActivityListener listener;
 
 
-
     public FinishFragment() {
         // Required empty public constructor
     }
+
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        view = inflater.inflate(R.layout.nav_finish, container, false);
+        view = inflater.inflate(R.layout.fragment_finish, container, false);
 
         boolean workoutStarted = listener.getWorkoutState();
 
@@ -81,16 +80,16 @@ public class FinishFragment extends Fragment {
             }
 
             clearSets();
+
         }
-
-
-
-
 
         return view;
     }
 
+
+
     public void setWorkoutStr(){
+
         workoutStr = workout.getTimeStr() + workout.getDateStr() + workout.getVolumeStr();
 
         String setinfo = "";
@@ -101,8 +100,8 @@ public class FinishFragment extends Fragment {
 
         workoutStr += setinfo +"\n";
 
-
     }
+
 
     public void saveWorkout(){
         FileOutputStream fos = null;
@@ -119,7 +118,9 @@ public class FinishFragment extends Fragment {
         } catch (IOException e) {
             e.printStackTrace();
         } finally {
+
             if (fos != null){
+
                 try {
                     fos.close();
                 } catch (IOException e) {
@@ -129,6 +130,7 @@ public class FinishFragment extends Fragment {
         }
     }
 
+
     @Override
     public void onAttach(Context context) {
         super.onAttach(context);
@@ -137,20 +139,22 @@ public class FinishFragment extends Fragment {
             listener = (MainActivityListener) getActivity();
         } catch (ClassCastException e){
             throw new ClassCastException(context.toString() + "must implement MainActivityListener");
+
         }
     }
 
+
     public void clearSets(){
+
         SharedPreferences data = getActivity().getSharedPreferences("data", getActivity().MODE_PRIVATE);
         SharedPreferences.Editor editor = data.edit();
         Gson gson = new Gson();
         SetsList.clear();
         String json = gson.toJson(SetsList);
         editor.putString("All Sets", json);
+
         editor.apply();
     }
-
-
 
 
 }

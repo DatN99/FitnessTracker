@@ -1,18 +1,12 @@
 package com.example.fitnesstracker.gui;
 
-import android.app.Dialog;
-import android.content.Context;
-import android.content.Intent;
-import android.content.SharedPreferences;
-import android.os.Bundle;
+
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.TextView;
 
-import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.fitnesstracker.R;
@@ -20,13 +14,11 @@ import com.example.fitnesstracker.workout.Sets;
 
 import java.util.ArrayList;
 
-import static android.content.Context.MODE_PRIVATE;
 
 public class SetAdapter extends RecyclerView.Adapter<SetAdapter.SetViewHolder> {
 
     private static ArrayList<Sets> SetsList;
     private OnItemClickListener mListener;
-
 
     public interface OnItemClickListener {
         void onAddItem(int position);
@@ -92,9 +84,6 @@ public class SetAdapter extends RecyclerView.Adapter<SetAdapter.SetViewHolder> {
                 }
             });
 
-
-
-
         }
     }
 
@@ -105,21 +94,23 @@ public class SetAdapter extends RecyclerView.Adapter<SetAdapter.SetViewHolder> {
 
     @Override
     public SetViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+
         View v = LayoutInflater.from(parent.getContext()).inflate(R.layout.cardviewsets, parent, false);
+
         SetViewHolder svh = new SetViewHolder(v, mListener);
+
         return svh;
     }
 
+
     @Override
     public void onBindViewHolder(SetAdapter.SetViewHolder holder, int position) {
-
 
         Sets currentSet = SetsList.get(position);
 
         holder.nameText.setText(currentSet.getName());
         holder.repsText.setText(currentSet.getReps());
         holder.weightText.setText(currentSet.getWeight());
-
 
     }
 

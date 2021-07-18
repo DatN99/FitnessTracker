@@ -30,14 +30,11 @@ public class ProgressGraphFragment extends Fragment {
 
     private LineChart Chart;
 
-
     ArrayList<String> WorkoutList = new ArrayList<String>();
     ArrayList<String> VolumeList = new ArrayList<String>();
     ArrayList<String> TimeDateList = new ArrayList<String>();
 
     private String workoutStr = "";
-    private int totalWorkouts = 0;
-
 
     public ProgressGraphFragment() {
         // Required empty public constructor
@@ -47,29 +44,30 @@ public class ProgressGraphFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        view = inflater.inflate(R.layout.nav_progress, container, false);
 
+        view = inflater.inflate(R.layout.fragment_progress_graph, container, false);
 
         Chart = view.findViewById(R.id.progressChartView);
         Chart.setDragEnabled(true);
         Chart.setScaleEnabled(false);
 
-
         getWorkouts();
+
         getTimeDateArray();
+
 
         ArrayList<Entry> values = new ArrayList<>();
 
         for (int i = 0; i < WorkoutList.size(); i++){
 
             values.add(new Entry(i, Integer.parseInt(VolumeList.get(i))));
+
         }
 
-        LineDataSet set = new LineDataSet(values, "Data Set");
 
+        LineDataSet set = new LineDataSet(values, "Data Set");
         ArrayList<ILineDataSet> dataset = new ArrayList<>();
         dataset.add(set);
-
         LineData data = new LineData(dataset);
 
         Chart.setData(data);
@@ -80,6 +78,7 @@ public class ProgressGraphFragment extends Fragment {
         for (int i = 0; i < VolumeList.size(); i++){
             s.add(TimeDateList.get(i));
         }
+
 
         XAxis xAxis = Chart.getXAxis();
 
@@ -96,6 +95,7 @@ public class ProgressGraphFragment extends Fragment {
         return view;
     }
 
+
     public void getWorkouts() {
         FileInputStream fis = null;
 
@@ -110,24 +110,31 @@ public class ProgressGraphFragment extends Fragment {
 
             while ((line = br.readLine()) != null) {
                 sb.append(line).append("\n");
-                totalWorkouts++;
             }
+
 
             workoutStr = sb.toString();
 
             for (int i = 0; i < workoutStr.length(); i++) {
+
                 currLine += workoutStr.charAt(i);
+
                 if (workoutStr.charAt(i) == '\n') {
+
                     WorkoutList.add(currLine);
+
                     currLine = "";
+
                 }
 
             }
+
         } catch (FileNotFoundException e) {
             e.printStackTrace();
         } catch (IOException e) {
             e.printStackTrace();
         }
+
 
         try {
             fis.close();
@@ -137,13 +144,16 @@ public class ProgressGraphFragment extends Fragment {
         }
     }
 
+
     private void getTimeDateArray(){
+
         String currVolume = "";
         String currDate = "";
 
-
         for (String s : WorkoutList){
+
             currDate += "(";
+
             for (int i = 0; i < 12; i ++) {
 
                 currDate += s.charAt(i);

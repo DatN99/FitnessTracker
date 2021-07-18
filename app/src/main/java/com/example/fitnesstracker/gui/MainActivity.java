@@ -6,39 +6,24 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.view.GravityCompat;
 import androidx.drawerlayout.widget.DrawerLayout;
 import androidx.fragment.app.Fragment;
-import androidx.fragment.app.FragmentManager;
-import androidx.fragment.app.FragmentTransaction;
-import androidx.recyclerview.widget.LinearLayoutManager;
-import androidx.recyclerview.widget.RecyclerView;
 
-import android.content.Intent;
-import android.content.SharedPreferences;
+
 import android.os.Bundle;
 import android.view.MenuItem;
-import android.view.View;
-import android.view.ViewGroup;
-import android.widget.Button;
-import android.widget.FrameLayout;
-import android.widget.Toast;
 
-import com.etebarian.meowbottomnavigation.MeowBottomNavigation;
+
 import com.example.fitnesstracker.R;
-import com.example.fitnesstracker.workout.Sets;
 import com.google.android.material.navigation.NavigationView;
-import com.google.gson.Gson;
-import com.google.gson.reflect.TypeToken;
+
 
 import org.jetbrains.annotations.NotNull;
 
-import java.lang.reflect.Type;
-import java.util.ArrayList;
 
 
 public class MainActivity extends AppCompatActivity implements MainActivityListener{
 
 
     private boolean workoutStarted = false;
-
 
 
     @Override
@@ -51,7 +36,6 @@ public class MainActivity extends AppCompatActivity implements MainActivityListe
         navigationView.setNavigationItemSelectedListener(new NavigationView.OnNavigationItemSelectedListener() {
             @Override
             public boolean onNavigationItemSelected(@NonNull @NotNull MenuItem item) {
-
 
                 if (item.getItemId() == R.id.nav_pastworkouts){
 
@@ -76,6 +60,7 @@ public class MainActivity extends AppCompatActivity implements MainActivityListe
 
     }
 
+
     @Override
     public void updateWorkoutState(){
         workoutStarted = !workoutStarted;
@@ -84,16 +69,13 @@ public class MainActivity extends AppCompatActivity implements MainActivityListe
             openWorkoutFragment();
         }
 
-
     }
+
 
     @Override
     public boolean getWorkoutState(){
-        if (workoutStarted){
-            return true;
-        }
 
-        return false;
+        return workoutStarted;
     }
 
 
@@ -105,6 +87,7 @@ public class MainActivity extends AppCompatActivity implements MainActivityListe
                 .commit();
 
     }
+
 
     private void openWorkoutFragment(){
         getSupportFragmentManager()
@@ -135,6 +118,7 @@ public class MainActivity extends AppCompatActivity implements MainActivityListe
 
     }
 
+
     @Override
     public void onResume(){
         super.onResume();
@@ -153,8 +137,6 @@ public class MainActivity extends AppCompatActivity implements MainActivityListe
     @Override
     public void onBackPressed(){
 
-
-
         if (getSupportFragmentManager().findFragmentByTag("WorkoutFragment") != null && getSupportFragmentManager().findFragmentByTag("WorkoutFragment").isVisible()){
 
         }
@@ -168,13 +150,24 @@ public class MainActivity extends AppCompatActivity implements MainActivityListe
 
         }
 
-
     }
 
 
+    @Override
+    public void onDestroy(){
+        if (getSupportFragmentManager().getBackStackEntryCount()>0){
+            Fragment WorkoutLogFrag = getSupportFragmentManager().findFragmentByTag("WorkoutFragment");
+            Fragment FinishFrag = getSupportFragmentManager().findFragmentByTag("FinishFragment");
+            getSupportFragmentManager()
+                    .beginTransaction()
+                    .remove(FinishFrag)
+                    .remove(WorkoutLogFrag)
+                    .commitNow();
+        }
 
+        super.onDestroy();
 
-
+    }
 
 
 }

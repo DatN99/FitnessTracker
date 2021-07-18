@@ -1,11 +1,9 @@
 package com.example.fitnesstracker.gui;
 
-import android.content.Context;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 
 import androidx.fragment.app.Fragment;
-import androidx.fragment.app.FragmentManager;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -13,10 +11,8 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
-import android.widget.FrameLayout;
 import android.widget.Toast;
 
-import com.etebarian.meowbottomnavigation.MeowBottomNavigation;
 import com.example.fitnesstracker.R;
 import com.example.fitnesstracker.workout.Sets;
 import com.google.gson.Gson;
@@ -30,15 +26,9 @@ public class WorkoutLogFragment extends Fragment implements addSetDialog.addSetD
 
     View view;
 
-    private Button startWorkout;
-    private boolean workoutStarted;
-    //Widget Variables
-    MeowBottomNavigation bottomNav;
-
     //Widget variables
     private Button addSet;
     private Button finishWorkout;
-    private FrameLayout addSetFragment1;
 
     //RecyclerView variables
     private RecyclerView mRecyclerView;
@@ -48,13 +38,7 @@ public class WorkoutLogFragment extends Fragment implements addSetDialog.addSetD
     //Sets Variables
     ArrayList<Sets> SetsList = new ArrayList<>();
 
-
-
-    private final String KEY_RECYCLER_STATE = "recycler_state";
-    private static Bundle mBundleRecyclerViewState;
-
     addSetDialog Dialog;
-
 
 
     public WorkoutLogFragment() {
@@ -62,17 +46,15 @@ public class WorkoutLogFragment extends Fragment implements addSetDialog.addSetD
     }
 
 
-
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        view = inflater.inflate(R.layout.fragment_workout_log, container, false);
 
+        view = inflater.inflate(R.layout.fragment_workout_log, container, false);
 
         //finding widgets
         addSet = view.findViewById(R.id.addSetButton);
         finishWorkout = view.findViewById(R.id.finishButton);
-
 
         addSet.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -88,14 +70,15 @@ public class WorkoutLogFragment extends Fragment implements addSetDialog.addSetD
             }
         });
 
+
         loadSets();
+
         //RecyclerView Setup
         buildRecyclerView();
 
-
-
         return view;
     }
+
 
     private void buildRecyclerView() {
 
@@ -110,8 +93,11 @@ public class WorkoutLogFragment extends Fragment implements addSetDialog.addSetD
         mAdapter.setOnItemClickListener(new SetAdapter.OnItemClickListener() {
             @Override
             public void onAddItem(int position) {
+
                 Sets copy = SetsList.get(position);
+
                 addCopy(position+1, copy);
+
             }
 
             @Override
@@ -128,22 +114,31 @@ public class WorkoutLogFragment extends Fragment implements addSetDialog.addSetD
 
     }
 
+
     public void editItem(int position){
+
         Sets editSet = SetsList.get(position);
+
         addSetDialog dialog = new addSetDialog();
         dialog.loadSetInfo(editSet, position);
         dialog.show(getChildFragmentManager(), "editSet");
 
-
     }
 
+
+
     public void removeItem(int position){
+
         SetsList.remove(position);
+
         mAdapter.notifyItemRemoved(position);
     }
 
+
     public void addCopy(int position, Sets copy){
+
         SetsList.add(position, copy);
+
         mAdapter.notifyItemInserted(position);
     }
 
@@ -152,23 +147,20 @@ public class WorkoutLogFragment extends Fragment implements addSetDialog.addSetD
     public void openDialog(){
 
         Dialog = new addSetDialog();
+
         Dialog.show(getChildFragmentManager(), "addSetDialog");
 
-
     }
-
 
 
     //add all sets to workout
     public void finishWorkout(){
 
         FinishFragment fragment = new FinishFragment();
+
         Bundle bundle = new Bundle();
         bundle.putParcelableArrayList("Sets List", SetsList);
         fragment.setArguments(bundle);
-
-
-
 
 
         getActivity().getSupportFragmentManager()
@@ -176,8 +168,6 @@ public class WorkoutLogFragment extends Fragment implements addSetDialog.addSetD
                 .replace(R.id.fragment_container, fragment, "FinishFragment")
                 .addToBackStack("FinishFragment")
                 .commit();
-
-
 
     }
 
@@ -192,9 +182,9 @@ public class WorkoutLogFragment extends Fragment implements addSetDialog.addSetD
         mAdapter.notifyItemInserted(SetsList.size());
         mLayoutManager.scrollToPosition(SetsList.size());
 
-
         Toast.makeText(getContext(), "Set Added", Toast.LENGTH_SHORT).show();
     }
+
 
     @Override
     public void changeSetInfo(String name, String reps, String weight, int position){
@@ -209,9 +199,7 @@ public class WorkoutLogFragment extends Fragment implements addSetDialog.addSetD
 
         Toast.makeText(getContext(), "Set Changed", Toast.LENGTH_SHORT).show();
 
-
     }
-
 
 
     public void loadSets(){
@@ -234,6 +222,7 @@ public class WorkoutLogFragment extends Fragment implements addSetDialog.addSetD
 
     }
 
+
     @Override
     public void onPause(){
         super.onPause();
@@ -245,8 +234,6 @@ public class WorkoutLogFragment extends Fragment implements addSetDialog.addSetD
         editor.putString("All Sets", json);
         editor.apply();
     }
-
-
 
 
 }

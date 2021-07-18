@@ -1,6 +1,5 @@
 package com.example.fitnesstracker.gui;
 
-import android.app.Activity;
 import android.content.Context;
 import android.os.Bundle;
 

@@ -4,4 +4,5 @@ public interface MainActivityListener {
 
     void updateWorkoutState();
     boolean getWorkoutState();
+
 }

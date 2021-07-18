@@ -3,14 +3,11 @@ package com.example.fitnesstracker.gui;
 import android.app.AlertDialog;
 import android.app.Dialog;
 import android.content.Context;
-import android.content.DialogInterface;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.Button;
-import android.widget.EditText;
 
-import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatDialogFragment;
 
 import com.example.fitnesstracker.R;
@@ -35,10 +32,14 @@ public class addSetDialog extends AppCompatDialogFragment {
     private addSetDialogListener listener;
     private int position;
 
+
     public interface addSetDialogListener{
         void sendSetInfo(String name, String reps, String weight);
         void changeSetInfo(String name, String reps, String weight, int position);
     }
+
+
+
 
     @Override
     public Dialog onCreateDialog(Bundle savedInstanceStanec) {
@@ -89,6 +90,7 @@ public class addSetDialog extends AppCompatDialogFragment {
         return builder.show();
 
     }
+
 
     @Override
     public void onAttach(Context context) {
@@ -145,6 +147,7 @@ public class addSetDialog extends AppCompatDialogFragment {
             return true;
         }
     }
+
 
     //method for weight name limitations and regulations
     protected boolean validateWeight(){
