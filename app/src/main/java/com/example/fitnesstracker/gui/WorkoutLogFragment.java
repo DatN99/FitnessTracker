@@ -11,6 +11,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.fitnesstracker.R;
@@ -29,6 +30,8 @@ public class WorkoutLogFragment extends Fragment implements addSetDialog.addSetD
     //Widget variables
     private Button addSet;
     private Button finishWorkout;
+    private TextView finish;
+
 
     //RecyclerView variables
     private RecyclerView mRecyclerView;
@@ -52,9 +55,11 @@ public class WorkoutLogFragment extends Fragment implements addSetDialog.addSetD
 
         view = inflater.inflate(R.layout.fragment_workout_log, container, false);
 
+        finish = getActivity().findViewById(R.id.finishText);
+        finish.setVisibility(View.VISIBLE);
+
         //finding widgets
         addSet = view.findViewById(R.id.addSetButton);
-        finishWorkout = view.findViewById(R.id.finishButton);
 
         addSet.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -63,13 +68,13 @@ public class WorkoutLogFragment extends Fragment implements addSetDialog.addSetD
             }
         });
 
-        finishWorkout.setOnClickListener(new View.OnClickListener() {
+
+        finish.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 finishWorkout();
             }
         });
-
 
         loadSets();
 

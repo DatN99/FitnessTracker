@@ -10,6 +10,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.fitnesstracker.R;
@@ -27,6 +28,7 @@ public class FinishFragment extends Fragment {
     View view;
 
     //Widget variables
+    TextView finish;
 
     //Workout/Sets variables
     Workout workout;
@@ -50,6 +52,9 @@ public class FinishFragment extends Fragment {
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         view = inflater.inflate(R.layout.fragment_finish, container, false);
+
+        finish = getActivity().findViewById(R.id.finishText);
+        finish.setVisibility(View.GONE);
 
         exit = view.findViewById(R.id.exitButton);
 

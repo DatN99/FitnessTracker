@@ -5,6 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context=".gui.MainActivity">
+    <include layout="@layout/toolbar"/>
 
 
     <FrameLayout
@@ -12,10 +13,11 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_above="@id/bottomNavWidget"
+        android:layout_below="@id/toolbar"
         app:layout_constraintBottom_toTopOf="@+id/bottomNavWidget"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toBottomOf="parent" />
 
 
     <com.google.android.material.bottomnavigation.BottomNavigationView

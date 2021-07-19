@@ -12,6 +12,7 @@ import android.os.Bundle;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
+import android.widget.TextView;
 
 
 import com.example.fitnesstracker.R;
@@ -27,6 +28,8 @@ public class MainActivity extends AppCompatActivity implements MainActivityListe
 
     private Button test;
 
+    private TextView Finish;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -37,7 +40,8 @@ public class MainActivity extends AppCompatActivity implements MainActivityListe
         BottomNavigationView bottomNav = findViewById(R.id.bottomNavWidget);
 
 
-
+        Finish = findViewById(R.id.finishText);
+        Finish.setVisibility(View.GONE);
 
 
         bottomNav.setOnItemSelectedListener(new NavigationBarView.OnItemSelectedListener() {
@@ -99,11 +103,14 @@ public class MainActivity extends AppCompatActivity implements MainActivityListe
 
 
     private void openWorkoutFragment(){
+
         getSupportFragmentManager()
                 .beginTransaction()
                 .replace(R.id.fragment_container, new WorkoutLogFragment(), "WorkoutFragment")
                 .addToBackStack("WorkoutFragment")
                 .commit();
+
+
     }
 
 
