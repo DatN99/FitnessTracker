@@ -9,6 +9,7 @@ import androidx.fragment.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.Toast;
 
 import com.example.fitnesstracker.R;
@@ -37,6 +38,7 @@ public class FinishFragment extends Fragment {
 
     private MainActivityListener listener;
 
+    private Button exit;
 
     public FinishFragment() {
         // Required empty public constructor
@@ -49,15 +51,20 @@ public class FinishFragment extends Fragment {
         // Inflate the layout for this fragment
         view = inflater.inflate(R.layout.fragment_finish, container, false);
 
+        exit = view.findViewById(R.id.exitButton);
+
+        exit.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                openStartWorkoutFragment();
+            }
+        });
+
         boolean workoutStarted = listener.getWorkoutState();
 
 
         if (!workoutStarted){
-            getActivity().getSupportFragmentManager()
-                    .beginTransaction()
-                    .replace(R.id.fragment_container, new StartWorkoutFragment())
-                    .addToBackStack(null)
-                    .commit();
+            openStartWorkoutFragment();
         }
 
         else {
@@ -154,6 +161,15 @@ public class FinishFragment extends Fragment {
         editor.putString("All Sets", json);
 
         editor.apply();
+    }
+
+    private void openStartWorkoutFragment(){
+        getActivity().getSupportFragmentManager()
+                .beginTransaction()
+                .replace(R.id.fragment_container, new StartWorkoutFragment())
+                .addToBackStack(null)
+                .commit();
+
     }
 
 

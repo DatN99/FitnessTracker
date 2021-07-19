@@ -9,14 +9,6 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.FitnessTracker">
-        <activity
-            android:name=".gui.NavigationActivity"
-            android:label="@string/title_activity_navigation"
-            android:theme="@style/Theme.FitnessTracker.NoActionBar"></activity>
-        <activity
-            android:name=".gui.MainNavActivity"
-            android:label="@string/title_activity_main_nav"
-            android:theme="@style/Theme.FitnessTracker.NoActionBar" />
         <activity android:name=".gui.MainActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />

@@ -1,23 +1,22 @@
 package com.example.fitnesstracker.gui;
 
-import androidx.annotation.NonNull;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.core.view.GravityCompat;
-import androidx.drawerlayout.widget.DrawerLayout;
+
 import androidx.fragment.app.Fragment;
 
 
 import android.os.Bundle;
+
 import android.view.MenuItem;
+import android.view.View;
+import android.widget.Button;
 
 
 import com.example.fitnesstracker.R;
-import com.google.android.material.navigation.NavigationView;
-
-
-import org.jetbrains.annotations.NotNull;
-
+import com.google.android.material.bottomnavigation.BottomNavigationView;
+import com.google.android.material.navigation.NavigationBarView;
 
 
 public class MainActivity extends AppCompatActivity implements MainActivityListener{
@@ -26,39 +25,49 @@ public class MainActivity extends AppCompatActivity implements MainActivityListe
     private boolean workoutStarted = false;
 
 
+    private Button test;
+
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.nav_activity_main);
+        setContentView(R.layout.activity_main);
 
 
-        NavigationView navigationView = findViewById(R.id.nav_view);
-        navigationView.setNavigationItemSelectedListener(new NavigationView.OnNavigationItemSelectedListener() {
+        BottomNavigationView bottomNav = findViewById(R.id.bottomNavWidget);
+
+
+
+
+
+        bottomNav.setOnItemSelectedListener(new NavigationBarView.OnItemSelectedListener() {
             @Override
-            public boolean onNavigationItemSelected(@NonNull @NotNull MenuItem item) {
+            public boolean onNavigationItemSelected(MenuItem item) {
 
-                if (item.getItemId() == R.id.nav_pastworkouts){
 
+                if (item.getTitle().toString().equals("Workout")){
+                    onResume();
+                }
+
+                else if (item.getTitle().toString().equals("Past")){
                     openPastWorkoutsFragment();
                 }
 
-                else if (item.getItemId() == R.id.nav_progressgraph){
+                else if (item.getTitle().toString().equals("Graph")){
                     openGraphFragment();
                 }
 
-                else if (item.getItemId() == R.id.nav_home){
-                    onResume();
-
-                }
-
-                DrawerLayout drawerLayout = findViewById(R.id.drawer_layout);
-                drawerLayout.closeDrawer(GravityCompat.START);
                 return true;
             }
         });
 
 
     }
+
+
+
+
+
 
 
     @Override
