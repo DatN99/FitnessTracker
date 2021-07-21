@@ -23,4 +23,27 @@
     <style name="Theme.FitnessTracker.AppBarOverlay" parent="ThemeOverlay.AppCompat.Dark.ActionBar" />
     <style name="Theme.FitnessTracker.PopupOverlay" parent="ThemeOverlay.AppCompat.Light" />
 
+
+    <style name="copyButton" parent="Widget.MaterialComponents.Button">
+        <item name ="materialThemeOverlay">@style/customcopybutton</item>
+    </style>
+
+    <style name="customcopybutton">
+        <item name="colorPrimary">#000000</item>
+    </style>
+
+
+    <style name="editButton" parent = "Widget.MaterialComponents.Button">
+        <item name = "materialThemeOverlay">@style/customeditbutton</item>
+    </style>
+
+    <style name= "customeditbutton">
+        <item name = "colorPrimary">#000000</item>
+    </style>
+
+    <style name="CircularDeterminateProgressBar">
+        <item name="android:indeterminateOnly">false</item>
+        <item name="android:progressDrawable">@drawable/timercircle</item>
+    </style>
+
 </resources>

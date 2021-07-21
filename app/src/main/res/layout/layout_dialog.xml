@@ -8,7 +8,6 @@
 
 
 
-
     <com.google.android.material.textfield.TextInputLayout
         android:id="@+id/nameTextInput"
         android:layout_width="150dp"
@@ -20,7 +19,7 @@
             android:id="@+id/nameInputEditText"
             android:layout_width="162dp"
             android:layout_height="wrap_content"
-            android:hint="Excercise Name"
+            android:hint="Exercise Name"
             />
     </com.google.android.material.textfield.TextInputLayout>
 
@@ -31,6 +30,7 @@
         android:layout_height="wrap_content"
         android:layout_centerHorizontal="true"
         android:layout_below="@id/nameTextInput"
+        android:layout_marginTop="10dp"
         >
         <com.google.android.material.textfield.TextInputEditText
             android:id="@+id/repsInputEditText"
@@ -46,6 +46,8 @@
         android:layout_height="wrap_content"
         android:layout_centerHorizontal="true"
         android:layout_below="@id/repsTextInput"
+        android:layout_marginTop="10dp"
+
         >
         <com.google.android.material.textfield.TextInputEditText
             android:id="@+id/weightInputEditText"
@@ -62,7 +64,9 @@
         android:layout_height="wrap_content"
         android:layout_centerHorizontal="true"
         android:layout_below="@id/weightTextInput"
-        android:text="Confirm Set"
+        android:text="Add Set"
+        android:layout_marginTop="15dp"
+
         />
 
 

@@ -27,6 +27,7 @@ public class StartWorkoutFragment extends Fragment {
                              Bundle savedInstanceState) {
         view = inflater.inflate(R.layout.fragment_start_workout, container, false);
 
+
         startWorkout = view.findViewById(R.id.startWorkoutButton);
 
         startWorkout.setOnClickListener(new View.OnClickListener() {

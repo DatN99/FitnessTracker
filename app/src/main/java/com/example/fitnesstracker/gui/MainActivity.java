@@ -106,6 +106,7 @@ public class MainActivity extends AppCompatActivity implements MainActivityListe
 
         getSupportFragmentManager()
                 .beginTransaction()
+                .setCustomAnimations(R.anim.enter_from_right, R.anim.exit_to_right, R.anim.enter_from_right, R.anim.exit_to_right)
                 .replace(R.id.fragment_container, new WorkoutLogFragment(), "WorkoutFragment")
                 .addToBackStack("WorkoutFragment")
                 .commit();

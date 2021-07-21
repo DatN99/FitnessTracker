@@ -22,7 +22,6 @@ public class SetAdapter extends RecyclerView.Adapter<SetAdapter.SetViewHolder> {
 
     public interface OnItemClickListener {
         void onAddItem(int position);
-        void onDeleteItem(int position);
         void onEditItem(int position);
     }
 
@@ -33,7 +32,6 @@ public class SetAdapter extends RecyclerView.Adapter<SetAdapter.SetViewHolder> {
         public TextView repsText;
         public TextView weightText;
         public Button addCopyButton;
-        public Button removeButton;
         public Button editButton;
 
 
@@ -43,7 +41,6 @@ public class SetAdapter extends RecyclerView.Adapter<SetAdapter.SetViewHolder> {
             repsText = itemView.findViewById(R.id.setsrepsTextView);
             weightText = itemView.findViewById(R.id.weightTextView);
             addCopyButton = itemView.findViewById(R.id.addCopyButton);
-            removeButton = itemView.findViewById(R.id.removeButton);
             editButton = itemView.findViewById(R.id.editSetButton);
 
 
@@ -59,17 +56,7 @@ public class SetAdapter extends RecyclerView.Adapter<SetAdapter.SetViewHolder> {
                 }
             });
 
-            removeButton.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    if (listener != null){
-                        int position = getBindingAdapterPosition();
-                        if (position != RecyclerView.NO_POSITION){
-                            listener.onDeleteItem(position);
-                        }
-                    }
-                }
-            });
+
 
 
             editButton.setOnClickListener(new View.OnClickListener() {
@@ -109,8 +96,8 @@ public class SetAdapter extends RecyclerView.Adapter<SetAdapter.SetViewHolder> {
         Sets currentSet = SetsList.get(position);
 
         holder.nameText.setText(currentSet.getName());
-        holder.repsText.setText(currentSet.getReps());
-        holder.weightText.setText(currentSet.getWeight());
+        holder.repsText.setText(currentSet.getReps() + " reps");
+        holder.weightText.setText(currentSet.getWeight() + " lbs");
 
     }
 

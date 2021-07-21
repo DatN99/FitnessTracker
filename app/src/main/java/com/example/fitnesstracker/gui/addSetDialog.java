@@ -7,6 +7,7 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.Button;
+import android.widget.EditText;
 
 import androidx.appcompat.app.AppCompatDialogFragment;
 
@@ -52,13 +53,14 @@ public class addSetDialog extends AppCompatDialogFragment {
 
 
         builder.setView(view);
-        builder.setTitle("Add Set");
+        builder.setTitle("New Set");
         builder.create();
 
         nameInput = view.findViewById(R.id.nameTextInput);
         repsInput = view.findViewById(R.id.repsTextInput);
         weightInput = view.findViewById(R.id.weightTextInput);
         confirmSetButton = view.findViewById(R.id.confirmSetButton);
+
 
         if (set != null){
             nameInput.getEditText().setText(set.getName());

@@ -1,26 +1,36 @@
 package com.example.fitnesstracker.gui;
 
 import android.content.SharedPreferences;
+import android.graphics.Canvas;
 import android.os.Bundle;
 
+import androidx.annotation.NonNull;
+import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
+import androidx.recyclerview.widget.ItemTouchHelper;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import android.os.CountDownTimer;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.fitnesstracker.R;
 import com.example.fitnesstracker.workout.Sets;
+import com.google.android.material.snackbar.Snackbar;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 
 import java.lang.reflect.Type;
 import java.util.ArrayList;
+import java.util.Locale;
+
+import it.xabaras.android.recyclerview.swipedecorator.RecyclerViewSwipeDecorator;
 
 
 public class WorkoutLogFragment extends Fragment implements addSetDialog.addSetDialogListener{
@@ -43,6 +53,19 @@ public class WorkoutLogFragment extends Fragment implements addSetDialog.addSetD
 
     addSetDialog Dialog;
 
+    //Timer variables
+    private TextView countdownText;
+    private Button StartPause;
+    private Button StopTimer;
+
+    private CountDownTimer countDownTimer;
+    private boolean timerRunning = false;
+
+    private long initialTime = 6000;
+    private long timeLeft = initialTime;
+    private ProgressBar timerProgress;
+
+
 
     public WorkoutLogFragment() {
         // Required empty public constructor
@@ -54,6 +77,8 @@ public class WorkoutLogFragment extends Fragment implements addSetDialog.addSetD
                              Bundle savedInstanceState) {
 
         view = inflater.inflate(R.layout.fragment_workout_log, container, false);
+
+        setupTimer();
 
         finish = getActivity().findViewById(R.id.finishText);
         finish.setVisibility(View.VISIBLE);
@@ -84,6 +109,99 @@ public class WorkoutLogFragment extends Fragment implements addSetDialog.addSetD
         return view;
     }
 
+    private void setupTimer(){
+
+        countdownText = view.findViewById(R.id.countdownTextView);
+        StartPause = view.findViewById(R.id.startpauseButton);
+
+        StopTimer = view.findViewById(R.id.stopButton);
+        StopTimer.setVisibility(View.GONE);
+
+        timerProgress = view.findViewById(R.id.timerProgressBar);
+
+
+        StartPause.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (timerRunning){
+                    pauseTimer();
+                }
+
+                else{
+                    startTimer();
+                }
+            }
+        });
+
+        StopTimer.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                countDownTimer.onFinish();
+            }
+        });
+
+        updateTimer();
+
+    }
+
+    private void pauseTimer(){
+        countDownTimer.cancel();
+        timerRunning=false;
+        StartPause.setText("Resume");
+
+    }
+
+
+
+    private void startTimer(){
+
+        countDownTimer = new CountDownTimer(timeLeft,1000) {
+            @Override
+            public void onTick(long millisUntilFinished) {
+                timeLeft = millisUntilFinished;
+                updateTimer();
+            }
+
+            @Override
+            public void onFinish() {
+                countDownTimer.cancel();
+                initialTime=6000;
+                timeLeft = initialTime;
+                timerRunning = false;
+                StartPause.setText("Start");
+                StopTimer.setVisibility(View.GONE);
+                updateTimer();
+
+            }
+        }.start();
+
+        timerRunning = true;
+        StartPause.setText("Pause");
+        StopTimer.setVisibility(View.VISIBLE);
+
+    }
+
+    private void updateTimer(){
+
+        int minutes = (int) (timeLeft / 1000) / 60;
+        int seconds = (int) (timeLeft / 1000) % 60;
+
+        String updatedTime = String.format(Locale.getDefault(), "%02d:%02d", minutes, seconds);
+
+        countdownText.setText(updatedTime);
+
+
+        float timeLeftINT = (float) timeLeft;
+        float initialTimeINT = (float) initialTime;
+
+        float newtime = (timeLeftINT/initialTimeINT) * 100;
+
+        int newtimeINT = (int) newtime;
+
+        timerProgress.setProgress(newtimeINT);
+
+    }
+
 
     private void buildRecyclerView() {
 
@@ -105,10 +223,6 @@ public class WorkoutLogFragment extends Fragment implements addSetDialog.addSetD
 
             }
 
-            @Override
-            public void onDeleteItem(int position){
-                removeItem(position);
-            }
 
             @Override
             public void onEditItem(int position){
@@ -117,7 +231,55 @@ public class WorkoutLogFragment extends Fragment implements addSetDialog.addSetD
         });
 
 
+
+        ItemTouchHelper itemTouchHelper = new ItemTouchHelper(simpleCallback);
+        itemTouchHelper.attachToRecyclerView(mRecyclerView);
+
+
+
     }
+
+    Sets deletedSet = null;
+
+    ItemTouchHelper.SimpleCallback simpleCallback = new ItemTouchHelper.SimpleCallback(0, ItemTouchHelper.LEFT) {
+        @Override
+        public boolean onMove(RecyclerView recyclerView, RecyclerView.ViewHolder viewHolder, RecyclerView.ViewHolder target) {
+            return false;
+        }
+
+        @Override
+        public void onSwiped(RecyclerView.ViewHolder viewHolder, int direction) {
+            int position = viewHolder.getBindingAdapterPosition();
+
+            deletedSet = SetsList.get(position);
+            removeItem(position);
+
+            Snackbar.make(mRecyclerView, deletedSet.getName(), Snackbar.LENGTH_LONG)
+                    .setAction("Undo", new View.OnClickListener() {
+                        @Override
+                        public void onClick(View v) {
+                            SetsList.add(position, deletedSet);
+                            mAdapter.notifyItemInserted(position);
+                        }
+                    }).show();
+        }
+
+        @Override
+        public void onChildDraw(Canvas c, RecyclerView recyclerView, RecyclerView.ViewHolder viewHolder, float dX, float dY, int actionState, boolean isCurrentlyActive) {
+
+            new RecyclerViewSwipeDecorator.Builder(c, recyclerView, viewHolder, dX, dY, actionState, isCurrentlyActive)
+                    .addSwipeLeftBackgroundColor(ContextCompat.getColor(getActivity(), android.R.color.holo_red_light))
+                    .addSwipeLeftActionIcon(R.drawable.workoutcarddelete)
+                    .create()
+                    .decorate();
+
+            super.onChildDraw(c, recyclerView, viewHolder, dX, dY, actionState, isCurrentlyActive);
+        }
+    };
+
+
+
+
 
 
     public void editItem(int position){
@@ -170,6 +332,7 @@ public class WorkoutLogFragment extends Fragment implements addSetDialog.addSetD
 
         getActivity().getSupportFragmentManager()
                 .beginTransaction()
+                .setCustomAnimations(R.anim.enter_from_top, R.anim.exit_to_top, R.anim.enter_from_top, R.anim.exit_to_top)
                 .replace(R.id.fragment_container, fragment, "FinishFragment")
                 .addToBackStack("FinishFragment")
                 .commit();
