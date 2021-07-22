@@ -5,6 +5,7 @@ import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
 import androidx.fragment.app.Fragment;
+import androidx.viewpager2.widget.ViewPager2;
 
 
 import android.os.Bundle;
@@ -31,6 +32,8 @@ public class MainActivity extends AppCompatActivity implements MainActivityListe
     private TextView Finish;
 
 
+
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -51,10 +54,12 @@ public class MainActivity extends AppCompatActivity implements MainActivityListe
 
                 if (item.getTitle().toString().equals("Workout")){
                     onResume();
+
                 }
 
                 else if (item.getTitle().toString().equals("Past")){
                     openPastWorkoutsFragment();
+
                 }
 
                 else if (item.getTitle().toString().equals("Graph")){
@@ -107,9 +112,11 @@ public class MainActivity extends AppCompatActivity implements MainActivityListe
         getSupportFragmentManager()
                 .beginTransaction()
                 .setCustomAnimations(R.anim.enter_from_right, R.anim.exit_to_right, R.anim.enter_from_right, R.anim.exit_to_right)
-                .replace(R.id.fragment_container, new WorkoutLogFragment(), "WorkoutFragment")
-                .addToBackStack("WorkoutFragment")
+                .replace(R.id.fragment_container, new PageViewerFragment(), "ViewPager")
+                .addToBackStack("ViewPager")
                 .commit();
+
+
 
 
     }
@@ -154,17 +161,10 @@ public class MainActivity extends AppCompatActivity implements MainActivityListe
     @Override
     public void onBackPressed(){
 
-        if (getSupportFragmentManager().findFragmentByTag("WorkoutFragment") != null && getSupportFragmentManager().findFragmentByTag("WorkoutFragment").isVisible()){
+        boolean allowBack = false;
 
-        }
-
-        else if (getSupportFragmentManager().findFragmentByTag("FinishFragment") != null && getSupportFragmentManager().findFragmentByTag("FinishFragment").isVisible()){
-            openStartWorkoutFragment();
-        }
-
-        else{
+        if (allowBack){
             super.onBackPressed();
-
         }
 
     }
@@ -172,6 +172,7 @@ public class MainActivity extends AppCompatActivity implements MainActivityListe
 
     @Override
     public void onDestroy(){
+
         if (getSupportFragmentManager().getBackStackEntryCount()>0){
             Fragment WorkoutLogFrag = getSupportFragmentManager().findFragmentByTag("WorkoutFragment");
             Fragment FinishFrag = getSupportFragmentManager().findFragmentByTag("FinishFragment");

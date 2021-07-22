@@ -23,6 +23,14 @@
     <style name="Theme.FitnessTracker.AppBarOverlay" parent="ThemeOverlay.AppCompat.Dark.ActionBar" />
     <style name="Theme.FitnessTracker.PopupOverlay" parent="ThemeOverlay.AppCompat.Light" />
 
+    <style name="entertimerButton" parent="Widget.MaterialComponents.Button">
+        <item name = "materialThemeOverlay">@style/customEnterTimer</item>
+    </style>
+
+    <style name="customEnterTimer">
+        <item name="colorPrimary">#000000</item>
+    </style>
+
 
     <style name="copyButton" parent="Widget.MaterialComponents.Button">
         <item name ="materialThemeOverlay">@style/customcopybutton</item>

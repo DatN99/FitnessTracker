@@ -33,6 +33,7 @@ public class StartWorkoutFragment extends Fragment {
         startWorkout.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+
                 listener.updateWorkoutState();
             }
         });

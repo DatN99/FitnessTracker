@@ -10,6 +10,7 @@ import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.ItemTouchHelper;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
+import androidx.viewpager2.widget.ViewPager2;
 
 import android.os.CountDownTimer;
 import android.view.LayoutInflater;
@@ -35,12 +36,13 @@ import it.xabaras.android.recyclerview.swipedecorator.RecyclerViewSwipeDecorator
 
 public class WorkoutLogFragment extends Fragment implements addSetDialog.addSetDialogListener{
 
+
     View view;
 
     //Widget variables
     private Button addSet;
-    private Button finishWorkout;
     private TextView finish;
+    private Button enterTimer;
 
 
     //RecyclerView variables
@@ -53,17 +55,6 @@ public class WorkoutLogFragment extends Fragment implements addSetDialog.addSetD
 
     addSetDialog Dialog;
 
-    //Timer variables
-    private TextView countdownText;
-    private Button StartPause;
-    private Button StopTimer;
-
-    private CountDownTimer countDownTimer;
-    private boolean timerRunning = false;
-
-    private long initialTime = 6000;
-    private long timeLeft = initialTime;
-    private ProgressBar timerProgress;
 
 
 
@@ -78,7 +69,13 @@ public class WorkoutLogFragment extends Fragment implements addSetDialog.addSetD
 
         view = inflater.inflate(R.layout.fragment_workout_log, container, false);
 
-        setupTimer();
+
+
+        enterTimer = view.findViewById(R.id.entertimerButton);
+
+
+
+
 
         finish = getActivity().findViewById(R.id.finishText);
         finish.setVisibility(View.VISIBLE);
@@ -101,6 +98,17 @@ public class WorkoutLogFragment extends Fragment implements addSetDialog.addSetD
             }
         });
 
+
+        enterTimer.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+
+
+            }
+        });
+
+
         loadSets();
 
         //RecyclerView Setup
@@ -109,98 +117,7 @@ public class WorkoutLogFragment extends Fragment implements addSetDialog.addSetD
         return view;
     }
 
-    private void setupTimer(){
 
-        countdownText = view.findViewById(R.id.countdownTextView);
-        StartPause = view.findViewById(R.id.startpauseButton);
-
-        StopTimer = view.findViewById(R.id.stopButton);
-        StopTimer.setVisibility(View.GONE);
-
-        timerProgress = view.findViewById(R.id.timerProgressBar);
-
-
-        StartPause.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                if (timerRunning){
-                    pauseTimer();
-                }
-
-                else{
-                    startTimer();
-                }
-            }
-        });
-
-        StopTimer.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                countDownTimer.onFinish();
-            }
-        });
-
-        updateTimer();
-
-    }
-
-    private void pauseTimer(){
-        countDownTimer.cancel();
-        timerRunning=false;
-        StartPause.setText("Resume");
-
-    }
-
-
-
-    private void startTimer(){
-
-        countDownTimer = new CountDownTimer(timeLeft,1000) {
-            @Override
-            public void onTick(long millisUntilFinished) {
-                timeLeft = millisUntilFinished;
-                updateTimer();
-            }
-
-            @Override
-            public void onFinish() {
-                countDownTimer.cancel();
-                initialTime=6000;
-                timeLeft = initialTime;
-                timerRunning = false;
-                StartPause.setText("Start");
-                StopTimer.setVisibility(View.GONE);
-                updateTimer();
-
-            }
-        }.start();
-
-        timerRunning = true;
-        StartPause.setText("Pause");
-        StopTimer.setVisibility(View.VISIBLE);
-
-    }
-
-    private void updateTimer(){
-
-        int minutes = (int) (timeLeft / 1000) / 60;
-        int seconds = (int) (timeLeft / 1000) % 60;
-
-        String updatedTime = String.format(Locale.getDefault(), "%02d:%02d", minutes, seconds);
-
-        countdownText.setText(updatedTime);
-
-
-        float timeLeftINT = (float) timeLeft;
-        float initialTimeINT = (float) initialTime;
-
-        float newtime = (timeLeftINT/initialTimeINT) * 100;
-
-        int newtimeINT = (int) newtime;
-
-        timerProgress.setProgress(newtimeINT);
-
-    }
 
 
     private void buildRecyclerView() {
@@ -392,8 +309,9 @@ public class WorkoutLogFragment extends Fragment implements addSetDialog.addSetD
 
 
     @Override
-    public void onPause(){
+    public void onPause() {
         super.onPause();
+
 
         SharedPreferences data = getActivity().getSharedPreferences("data", getActivity().MODE_PRIVATE);
         SharedPreferences.Editor editor = data.edit();
@@ -401,6 +319,7 @@ public class WorkoutLogFragment extends Fragment implements addSetDialog.addSetD
         String json = gson.toJson(SetsList);
         editor.putString("All Sets", json);
         editor.apply();
+
     }
 
 
