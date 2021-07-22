@@ -12,6 +12,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.EditText;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -35,8 +36,8 @@ public class TimerFragment extends Fragment {
     private CountDownTimer countDownTimer;
     private boolean timerRunning = false;
 
-    private long initialTime = 60000;
-    private long timeLeft = initialTime;
+    private long initialTime;
+    private long timeLeft;
     private ProgressBar timerProgress;
 
 
@@ -44,6 +45,9 @@ public class TimerFragment extends Fragment {
     private int initial_sec;
 
     private long mEndTime;
+
+    private EditText selectTime;
+    private Button confirmTime;
 
 
 
@@ -58,18 +62,53 @@ public class TimerFragment extends Fragment {
         // Inflate the layout for this fragment
         view = inflater.inflate(R.layout.fragment_timer, container, false);
 
-
+        //sets up timer (pre-start)
         setupTimer();
 
-
-
+        //allows user to enter a specific time in seconds
+        selectTime();
 
         return view;
     }
 
+    private void selectTime(){
+        selectTime = view.findViewById(R.id.timeSelectEditText);
+
+        confirmTime = view.findViewById(R.id.setTimeButton);
+
+        confirmTime.setOnClickListener(new View.OnClickListener() {
+
+            @Override
+            public void onClick(View v) {
+
+                //User must select a valid quantity of seconds
+                String newTime = selectTime.getText().toString();
+
+                boolean containsLetters = newTime.matches("[0-9]+");
+
+                if (newTime.equals("") || !containsLetters){
+                    selectTime.setError("Time must not contain letters");
+                }
+
+                else{
+
+                    //change initial time and timeLeft
+                    initialTime = Integer.parseInt(newTime) * 1000;
+                    timeLeft = initialTime;
+
+                    //update seconds, timer, and default time
+                    getSec();
+                    updateTimer();
+                    saveTime();
+
+                }
+            }
+        });
+
+    }
+
 
     private void setupTimer(){
-
 
         countdownText = view.findViewById(R.id.countdownTextView);
         StartPause = view.findViewById(R.id.startpauseButton);
@@ -79,7 +118,6 @@ public class TimerFragment extends Fragment {
 
         timerProgress = view.findViewById(R.id.timerProgressBar);
         timerProgress.setProgress(100);
-
 
 
         StartPause.setOnClickListener(new View.OnClickListener() {
@@ -98,9 +136,11 @@ public class TimerFragment extends Fragment {
         StopTimer.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                //finishes and cancels timer
                 countDownTimer.onFinish();
                 countDownTimer.cancel();
-                saveTime();
+      //          saveTime();
+                updateTimer();
 
             }
         });
@@ -116,6 +156,13 @@ public class TimerFragment extends Fragment {
 
     }
 
+    private void getSec(){
+        curr_sec = (int) (timeLeft);
+        initial_sec = (int) (initialTime) ;
+
+        mEndTime = System.currentTimeMillis() + timeLeft;
+    }
+
 
 
     private void startTimer(){
@@ -124,10 +171,7 @@ public class TimerFragment extends Fragment {
 
 
 
-        curr_sec = (int) (timeLeft);
-        initial_sec = (int) (initialTime) ;
-
-        mEndTime = System.currentTimeMillis() + timeLeft;
+        getSec();
 
 
 
@@ -142,7 +186,6 @@ public class TimerFragment extends Fragment {
             @Override
             public void onFinish() {
 
-                    initialTime = 60000;
                     timeLeft = initialTime;
                     timerRunning = false;
                     StartPause.setText("Start");
@@ -161,6 +204,10 @@ public class TimerFragment extends Fragment {
     }
 
     private void updateTimer(){
+
+        if (curr_sec == 0){
+            getSec();
+        }
 
         int minutes = (int) (timeLeft / 1000) / 60;
         int seconds = (int) (timeLeft / 1000) % 60;
@@ -193,6 +240,7 @@ public class TimerFragment extends Fragment {
         super.onResume();
 
         SharedPreferences prefs = getActivity().getSharedPreferences("prefs", getActivity().MODE_PRIVATE);
+        initialTime = prefs.getLong("initialTime", 60000);
         timeLeft = prefs.getLong("millisLeft", initialTime);
         timerRunning = prefs.getBoolean("timerRunning", false);
         updateTimer();
@@ -214,18 +262,22 @@ public class TimerFragment extends Fragment {
     public void onPause() {
         super.onPause();
 
-       saveTime();
+        saveTime();
 
     }
+
 
     public void saveTime(){
         SharedPreferences prefs = getActivity().getSharedPreferences("prefs", getActivity().MODE_PRIVATE);
         SharedPreferences.Editor editor = prefs.edit();
+        editor.putLong("initialTime", initialTime);
         editor.putLong("millisLeft", timeLeft);
         editor.putBoolean("timerRunning", timerRunning);
         editor.putLong("endTime", mEndTime);
         editor.apply();
-        countDownTimer.cancel();
+        if (timerRunning) {
+            countDownTimer.cancel();
+        }
     }
 
 }
