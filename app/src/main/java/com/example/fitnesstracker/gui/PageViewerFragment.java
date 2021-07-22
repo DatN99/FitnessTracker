@@ -56,5 +56,6 @@ public class PageViewerFragment extends Fragment {
     public void onPause() {
         super.onPause();
         WorkoutLogFrag.onPause();
+        TimerFrag.onPause();
     }
 }

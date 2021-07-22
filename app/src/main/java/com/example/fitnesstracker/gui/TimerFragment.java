@@ -1,6 +1,7 @@
 package com.example.fitnesstracker.gui;
 
 import android.app.Activity;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 
 import androidx.fragment.app.Fragment;
@@ -18,6 +19,8 @@ import android.widget.Toast;
 import com.example.fitnesstracker.R;
 
 import java.util.Locale;
+
+import javax.xml.parsers.SAXParser;
 
 
 public class TimerFragment extends Fragment {
@@ -39,6 +42,8 @@ public class TimerFragment extends Fragment {
 
     private int curr_sec;
     private int initial_sec;
+
+    private long mEndTime;
 
 
 
@@ -65,6 +70,7 @@ public class TimerFragment extends Fragment {
 
     private void setupTimer(){
 
+
         countdownText = view.findViewById(R.id.countdownTextView);
         StartPause = view.findViewById(R.id.startpauseButton);
 
@@ -73,6 +79,7 @@ public class TimerFragment extends Fragment {
 
         timerProgress = view.findViewById(R.id.timerProgressBar);
         timerProgress.setProgress(100);
+
 
 
         StartPause.setOnClickListener(new View.OnClickListener() {
@@ -92,6 +99,9 @@ public class TimerFragment extends Fragment {
             @Override
             public void onClick(View v) {
                 countDownTimer.onFinish();
+                countDownTimer.cancel();
+                saveTime();
+
             }
         });
 
@@ -109,12 +119,20 @@ public class TimerFragment extends Fragment {
 
 
     private void startTimer(){
+        /**START HERE. FIND A WAY FOR USER TO CUSTOMIZE TIME INPUT*/
+        /**ALSO NEED TO FIND A WAY TO KEEP TIMER RUNNING IN BACKGROUND*/
 
-        /**START HERE. FIGURE OUT TIME. PROBLEM STARTS WITH FIGURING OUT HOW TO FIND SECONDS TO MINUTES IN FOOLPROOF WAY*/
-        curr_sec = (int) (timeLeft / 1000) % 60;
-        initial_sec = (int) (initialTime/1000) % 60 ;
 
-        countDownTimer = new CountDownTimer(timeLeft,1000) {
+
+        curr_sec = (int) (timeLeft);
+        initial_sec = (int) (initialTime) ;
+
+        mEndTime = System.currentTimeMillis() + timeLeft;
+
+
+
+        countDownTimer = new CountDownTimer(timeLeft, 1000) {
+
             @Override
             public void onTick(long millisUntilFinished) {
                 timeLeft = millisUntilFinished;
@@ -124,14 +142,13 @@ public class TimerFragment extends Fragment {
             @Override
             public void onFinish() {
 
-                initialTime=6000;
-                timeLeft = initialTime;
-                timerRunning = false;
-                StartPause.setText("Start");
-                StopTimer.setVisibility(View.GONE);
-                updateTimer();
-                countDownTimer.cancel();
-                timerProgress.setProgress(100);
+                    initialTime = 60000;
+                    timeLeft = initialTime;
+                    timerRunning = false;
+                    StartPause.setText("Start");
+                    StopTimer.setVisibility(View.GONE);
+                    updateTimer();
+                    timerProgress.setProgress(100);
 
 
             }
@@ -148,8 +165,12 @@ public class TimerFragment extends Fragment {
         int minutes = (int) (timeLeft / 1000) / 60;
         int seconds = (int) (timeLeft / 1000) % 60;
 
-        if (curr_sec != seconds && timerRunning){
-            float progressFloat = ((float) seconds/ (float) initial_sec) * 100;
+        int total_seconds = (int) (timeLeft);
+
+
+        if (curr_sec != total_seconds && timerRunning){
+
+            float progressFloat = ((float) total_seconds/ (float) initial_sec) * 100;
 
             int progressInt = (int) progressFloat;
 
@@ -159,13 +180,52 @@ public class TimerFragment extends Fragment {
 
         }
 
+
         String updatedTime = String.format(Locale.getDefault(), "%02d:%02d", minutes, seconds);
 
         countdownText.setText(updatedTime);
 
 
+    }
 
+    @Override
+    public void onResume() {
+        super.onResume();
 
+        SharedPreferences prefs = getActivity().getSharedPreferences("prefs", getActivity().MODE_PRIVATE);
+        timeLeft = prefs.getLong("millisLeft", initialTime);
+        timerRunning = prefs.getBoolean("timerRunning", false);
+        updateTimer();
+        if (timerRunning) {
+            mEndTime = prefs.getLong("endTime", 0);
+            timeLeft = mEndTime - System.currentTimeMillis();
+            if (timeLeft < 0) {
+                timeLeft = 0;
+                timerRunning = false;
+                updateTimer();
+            } else {
+                startTimer();
+            }
+        }
 
     }
+
+    @Override
+    public void onPause() {
+        super.onPause();
+
+       saveTime();
+
+    }
+
+    public void saveTime(){
+        SharedPreferences prefs = getActivity().getSharedPreferences("prefs", getActivity().MODE_PRIVATE);
+        SharedPreferences.Editor editor = prefs.edit();
+        editor.putLong("millisLeft", timeLeft);
+        editor.putBoolean("timerRunning", timerRunning);
+        editor.putLong("endTime", mEndTime);
+        editor.apply();
+        countDownTimer.cancel();
+    }
+
 }
