@@ -23,6 +23,7 @@ public class PageViewerFragment extends Fragment {
     TimerFragment TimerFrag;
 
 
+
     public PageViewerFragment() {
         // Required empty public constructor
     }
@@ -40,13 +41,14 @@ public class PageViewerFragment extends Fragment {
         TimerFrag = new TimerFragment();
 
 
-        pagerAdapter = new PageViewerAdapter(getActivity(), WorkoutLogFrag, TimerFrag);
+        pagerAdapter = new PageViewerAdapter(this, WorkoutLogFrag, TimerFrag);
         viewPager.setAdapter(pagerAdapter);
 
         viewPager.setCurrentItem(1);
 
 
         viewPager.setOffscreenPageLimit(2);
+
 
 
         return view;
@@ -57,5 +59,12 @@ public class PageViewerFragment extends Fragment {
         super.onPause();
         WorkoutLogFrag.onPause();
         TimerFrag.onPause();
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+
+
     }
 }

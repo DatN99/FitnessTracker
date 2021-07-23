@@ -55,6 +55,7 @@ public class WorkoutLogFragment extends Fragment implements addSetDialog.addSetD
 
     addSetDialog Dialog;
 
+    private int test;
 
 
 
@@ -72,8 +73,6 @@ public class WorkoutLogFragment extends Fragment implements addSetDialog.addSetD
 
 
         enterTimer = view.findViewById(R.id.entertimerButton);
-
-
 
 
 
@@ -113,6 +112,8 @@ public class WorkoutLogFragment extends Fragment implements addSetDialog.addSetD
 
         //RecyclerView Setup
         buildRecyclerView();
+
+
 
         return view;
     }

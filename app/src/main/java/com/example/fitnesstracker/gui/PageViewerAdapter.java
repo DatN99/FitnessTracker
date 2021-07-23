@@ -1,5 +1,6 @@
 package com.example.fitnesstracker.gui;
 
+import android.app.Activity;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
@@ -12,15 +13,16 @@ import java.util.Timer;
 
 public class PageViewerAdapter extends FragmentStateAdapter {
 
-    FragmentManager frag_manager;
 
     WorkoutLogFragment WorkoutLogFrag;
     TimerFragment TimerFrag;
 
 
-    public PageViewerAdapter(FragmentActivity FA, WorkoutLogFragment WLF, TimerFragment TF) {
 
-        super(FA);
+
+    public PageViewerAdapter(Fragment F, WorkoutLogFragment WLF, TimerFragment TF) {
+
+        super(F);
 
         if (WorkoutLogFrag == null && TimerFrag == null) {
             WorkoutLogFrag = WLF;
