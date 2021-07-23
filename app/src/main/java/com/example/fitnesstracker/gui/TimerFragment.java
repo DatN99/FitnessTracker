@@ -68,7 +68,9 @@ public class TimerFragment extends Fragment {
         System.out.println("ON CREATE VIEW");
 
 
-        onResume();
+        setupTimer();
+
+        selectTime();
 
 
         return view;
@@ -198,9 +200,13 @@ public class TimerFragment extends Fragment {
             @Override
             public void onTick(long millisUntilFinished) {
 
+                System.out.println(millisUntilFinished);
+
                 timeLeft = millisUntilFinished;
 
                 updateTimer();
+
+
             }
 
             @Override
@@ -227,6 +233,8 @@ public class TimerFragment extends Fragment {
 
     private void updateTimer(){
 
+        System.out.println("Timer Updated");
+
 
         if (curr_sec == 0){
             getSec();
@@ -234,6 +242,11 @@ public class TimerFragment extends Fragment {
 
         int minutes = (int) (timeLeft / 1000) / 60;
         int seconds = (int) (timeLeft / 1000) % 60;
+
+        if (seconds<10 && timerRunning){
+            System.out.println("BP");
+            timerProgress.setProgress(0);
+        }
 
         int total_seconds = (int) (timeLeft)/1000;
 
@@ -279,13 +292,14 @@ public class TimerFragment extends Fragment {
 
 
         System.out.println("ON RESUME");
-
+        System.out.println(test);
 
         //gather previously stored time
         SharedPreferences prefs = getActivity().getSharedPreferences("prefs", getActivity().MODE_PRIVATE);
         initialTime = prefs.getLong("initialTime", 60000);
         timeLeft = prefs.getLong("millisLeft", initialTime);
         timerRunning = prefs.getBoolean("timerRunning", false);
+
         updateTimer();
 
 
@@ -324,9 +338,7 @@ public class TimerFragment extends Fragment {
         editor.putBoolean("timerRunning", timerRunning);
         editor.putLong("endTime", mEndTime);
         editor.apply();
-        if (timerRunning) {
-            countDownTimer.cancel();
-        }
+
     }
 
 }
