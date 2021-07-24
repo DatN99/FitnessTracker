@@ -22,6 +22,8 @@ public class PageViewerFragment extends Fragment {
     WorkoutLogFragment WorkoutLogFrag;
     TimerFragment TimerFrag;
 
+    private int i;
+
 
 
     public PageViewerFragment() {
@@ -34,6 +36,8 @@ public class PageViewerFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         view = inflater.inflate(R.layout.fragment_page_viewer, container, false);
+
+        i++;
 
         viewPager = view.findViewById(R.id.ViewPager2Widget);
 
@@ -64,6 +68,7 @@ public class PageViewerFragment extends Fragment {
     @Override
     public void onResume() {
         super.onResume();
+
 
 
     }

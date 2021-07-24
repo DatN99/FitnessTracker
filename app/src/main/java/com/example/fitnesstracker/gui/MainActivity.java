@@ -109,10 +109,17 @@ public class MainActivity extends AppCompatActivity implements MainActivityListe
 
     private void openWorkoutFragment(){
 
+        Fragment curr_frag = getSupportFragmentManager().findFragmentByTag("ViewPager");
+
+        if (curr_frag == null){
+            curr_frag = new PageViewerFragment();
+        }
+
+
         getSupportFragmentManager()
                 .beginTransaction()
                 .setCustomAnimations(R.anim.enter_from_right, R.anim.exit_to_right, R.anim.enter_from_right, R.anim.exit_to_right)
-                .replace(R.id.fragment_container, new PageViewerFragment(), "ViewPager")
+                .replace(R.id.fragment_container, curr_frag, "ViewPager")
                 .addToBackStack("ViewPager")
                 .commit();
 

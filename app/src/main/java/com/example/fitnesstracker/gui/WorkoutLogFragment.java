@@ -135,9 +135,10 @@ public class WorkoutLogFragment extends Fragment implements addSetDialog.addSetD
             @Override
             public void onAddItem(int position) {
 
+                /**FIX COPY HERE M8*/
                 Sets copy = SetsList.get(position);
 
-                addCopy(position+1, copy);
+                addCopy(position+1, new Sets(copy.getName(), copy.getReps(), copy.getWeight()));
 
             }
 
@@ -313,13 +314,18 @@ public class WorkoutLogFragment extends Fragment implements addSetDialog.addSetD
     public void onPause() {
         super.onPause();
 
+        if (getActivity() != null) {
 
-        SharedPreferences data = getActivity().getSharedPreferences("data", getActivity().MODE_PRIVATE);
-        SharedPreferences.Editor editor = data.edit();
-        Gson gson = new Gson();
-        String json = gson.toJson(SetsList);
-        editor.putString("All Sets", json);
-        editor.apply();
+
+            SharedPreferences data = getActivity().getSharedPreferences("data", getActivity().MODE_PRIVATE);
+            SharedPreferences.Editor editor = data.edit();
+            Gson gson = new Gson();
+            String json = gson.toJson(SetsList);
+            editor.putString("All Sets", json);
+            editor.apply();
+
+        }
+
 
     }
 

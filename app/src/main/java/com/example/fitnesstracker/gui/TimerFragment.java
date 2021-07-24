@@ -1,9 +1,16 @@
 package com.example.fitnesstracker.gui;
 
 import android.app.Activity;
+import android.app.Notification;
+import android.app.NotificationChannel;
+import android.app.NotificationManager;
+import android.content.Context;
 import android.content.SharedPreferences;
+import android.os.Build;
 import android.os.Bundle;
 
+import androidx.core.app.NotificationCompat;
+import androidx.core.app.NotificationManagerCompat;
 import androidx.fragment.app.Fragment;
 import androidx.viewpager2.widget.ViewPager2;
 
@@ -11,6 +18,7 @@ import android.os.CountDownTimer;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ProgressBar;
@@ -50,12 +58,14 @@ public class TimerFragment extends Fragment {
 
     private long mEndTime;
 
-    private int test;
+    private NotificationCompat.Builder notificationBuilder;
 
+    NotificationManagerCompat managerCompat;
 
-    public TimerFragment() {
-        // Required empty public constructor
-    }
+    boolean Paused;
+
+    private int finished;
+
 
 
     @Override
@@ -64,20 +74,58 @@ public class TimerFragment extends Fragment {
         // Inflate the layout for this fragment
         view = inflater.inflate(R.layout.fragment_timer, container, false);
 
-
         System.out.println("ON CREATE VIEW");
 
 
+
+        createNotificationChannel();
+
+
+        //sets up widget associated with the countdownText timer
         setupTimer();
 
-        selectTime();
+        loadTimer();
 
+        //loads options for user to select time
+        selectTime();
 
         return view;
     }
 
 
+
+    public void buildNotification(String time){
+        notificationBuilder.setSmallIcon(R.drawable.dumbbell)
+                .setContentTitle("Title")
+                .setContentText(time);
+
+        managerCompat = NotificationManagerCompat.from(getActivity());
+        managerCompat.notify(1, notificationBuilder.build());
+
+    }
+
+    //to be executed immediately upon timer creation
+    public void createNotificationChannel(){
+        notificationBuilder = new NotificationCompat.Builder(getActivity(), "1");
+
+        // Create the NotificationChannel, but only on API 26+ because
+        // the NotificationChannel class is new and not in the support library
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+            CharSequence name = "Name";
+            String description = "Time";
+            int importance = NotificationManager.IMPORTANCE_LOW;
+            NotificationChannel channel = new NotificationChannel("1", name, importance);
+            channel.setDescription(description);
+            // Register the channel with the system; you can't change the importance
+            // or other notification behaviors after this
+            NotificationManager notificationManager = getActivity().getSystemService(NotificationManager.class);
+            notificationManager.createNotificationChannel(channel);
+        }
+
+    }
+
     private void selectTime(){
+
         selectTime = view.findViewById(R.id.timeSelectEditText);
 
         confirmTime = view.findViewById(R.id.setTimeButton);
@@ -92,15 +140,16 @@ public class TimerFragment extends Fragment {
 
                 boolean containsLetters = newTime.matches("[0-9]+");
 
+
                 if (newTime.equals("") || !containsLetters){
                     selectTime.setError("Time must not contain letters");
                 }
 
-                if (timerRunning){
+                else if (timerRunning){
                     selectTime.setError("Please cancel the current timer to make changes");
                 }
 
-                else{
+                else {
 
                     //change initial time and timeLeft
                     initialTime = Integer.parseInt(newTime) * 1000;
@@ -111,10 +160,27 @@ public class TimerFragment extends Fragment {
                     updateTimer();
                     saveTime();
 
+
+                    hideKeyboard();
+
+                    selectTime.setText("");
+
                 }
             }
         });
 
+    }
+
+    private void hideKeyboard() {
+        InputMethodManager imm = (InputMethodManager) getActivity().getSystemService(Activity.INPUT_METHOD_SERVICE);
+
+        imm.toggleSoftInput(InputMethodManager.HIDE_IMPLICIT_ONLY, 0);
+        // Check if no view has focus:
+        View view = getActivity().getCurrentFocus();
+        if (view != null) {
+            InputMethodManager inputManager = (InputMethodManager) getActivity().getSystemService(Context.INPUT_METHOD_SERVICE);
+            inputManager.hideSoftInputFromWindow(view.getWindowToken(), InputMethodManager.HIDE_NOT_ALWAYS);
+        }
     }
 
 
@@ -127,9 +193,10 @@ public class TimerFragment extends Fragment {
         StopTimer.setVisibility(View.GONE);
 
         timerProgress = view.findViewById(R.id.timerProgressBar);
-
-
         timerProgress.setProgress(100);
+
+        //called once on timer initial setup
+        updateTimer();
 
 
         StartPause.setOnClickListener(new View.OnClickListener() {
@@ -142,87 +209,90 @@ public class TimerFragment extends Fragment {
                 }
 
                 else{
-                    if (test > 0){
-                        System.out.println("f");
-                    }
                     startTimer();
                 }
             }
         });
 
+
         StopTimer.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                //finishes and cancels timer
-                countDownTimer.onFinish();
-                countDownTimer.cancel();
 
-                timerRunning=false;
-                saveTime();
-                //updates timer to reset
-                updateTimer();
+                if (countDownTimer != null) {
+                    //finishes and cancels timer
+                    countDownTimer.onFinish();
+                }
+
+                else{
+                    resetTimer();
+                }
 
 
             }
         });
 
-        //called once on timer initial setup
-        updateTimer();
 
     }
 
+
     private void pauseTimer(){
         //cancels timer
+        saveTime();
         countDownTimer.cancel();
+        countDownTimer = null;
         timerRunning=false;
         StartPause.setText("Resume");
 
     }
 
+
+    //only used for updating progress bar
     private void getSec(){
 
         curr_sec = (int) (timeLeft)/1000;
         initial_sec = (int) (initialTime)/1000 ;
 
         mEndTime = System.currentTimeMillis() + timeLeft;
-    }
 
+    }
 
 
     private void startTimer(){
 
-
         //get current amount of seconds
         getSec();
 
-        countDownTimer = new CountDownTimer(timeLeft, 1000) {
+        if (countDownTimer == null) {
+            System.out.println("NEW COUNTDOWN TIMER CREATED");
+            countDownTimer = new CountDownTimer(timeLeft, 1000) {
 
-            @Override
-            public void onTick(long millisUntilFinished) {
+                @Override
+                public void onTick(long millisUntilFinished) {
 
-                System.out.println(millisUntilFinished);
+                    System.out.println(millisUntilFinished);
 
-                timeLeft = millisUntilFinished;
-
-                updateTimer();
-
-
-            }
-
-            @Override
-            public void onFinish() {
-
-                timeLeft = initialTime;
-                timerRunning = false;
-                StartPause.setText("Start");
-                StopTimer.setVisibility(View.GONE);
-                updateTimer();
-                saveTime();
-                timerProgress.setProgress(100);
+                    timeLeft = millisUntilFinished;
 
 
-            }
-        }.start();
+                    updateTimer();
+
+                }
+
+                @Override
+                public void onFinish() {
+
+                    countDownTimer.cancel();
+                    countDownTimer = null;
+                    finished++;
+                    resetTimer();
+
+
+                }
+            }.start();
+        }
+
+
 
         //set fields for a running timer
         timerRunning = true;
@@ -231,25 +301,55 @@ public class TimerFragment extends Fragment {
 
     }
 
-    private void updateTimer(){
+    private void resetTimer(){
+        timeLeft = initialTime;
+        timerRunning = false;
+        StartPause.setText("Start");
+        StopTimer.setVisibility(View.GONE);
+        updateTimer();
+        saveTime();
+    }
 
-        System.out.println("Timer Updated");
+
+    private void updateTimer(){
 
 
         if (curr_sec == 0){
             getSec();
         }
 
-        int minutes = (int) (timeLeft / 1000) / 60;
-        int seconds = (int) (timeLeft / 1000) % 60;
 
-        if (seconds<10 && timerRunning){
-            System.out.println("BP");
-            timerProgress.setProgress(0);
+        //continue timer if not finished
+        if (timerRunning) {
+
+            int minutes = (int) (timeLeft / 1000) / 60;
+            int seconds = (int) (timeLeft / 1000) % 60;
+
+            //countdown Text only gets updated every second
+            String updatedTime = String.format(Locale.getDefault(), "%02d:%02d", minutes, seconds);
+
+            countdownText.setText(updatedTime);
+
         }
 
-        int total_seconds = (int) (timeLeft)/1000;
 
+        //reset timer if timeLeft is 0 (i.e. 0 set by loadTimer())
+        if (timeLeft == initialTime){
+
+            int resetMinutes = (int) (initialTime / 1000) / 60;
+            int resetSeconds = (int) (initialTime / 1000) % 60;
+
+            String resetTime = String.format(Locale.getDefault(), "%02d:%02d", resetMinutes, resetSeconds);
+
+            countdownText.setText(resetTime);
+            timerProgress.setProgress(100);
+
+        }
+
+
+
+
+        int total_seconds = (int) (timeLeft)/1000;
 
         //progressbar only gets updated once every second
         if (curr_sec != total_seconds && timerRunning){
@@ -258,41 +358,30 @@ public class TimerFragment extends Fragment {
 
             int progressInt = (int) progressFloat;
 
+
             timerProgress.setProgress(progressInt);
 
             curr_sec = total_seconds;
 
         }
 
-        //countdown Text only gets updated every second
-        String updatedTime = String.format(Locale.getDefault(), "%02d:%02d", minutes, seconds);
+        System.out.println("Paused:  "+Paused);
+        if (Paused){
+            buildNotification(countdownText.getText().toString());
+        }
 
-
-        countdownText.setText(updatedTime);
-
-        if (timeLeft == 0){
-
-            int resetMinutes = (int) (initialTime / 1000) / 60;
-            int resetSeconds = (int) (initialTime / 1000) % 60;
-
-
-            String resetTime = String.format(Locale.getDefault(), "%02d:%02d", resetMinutes, resetSeconds);
-
-            countdownText.setText(resetTime);
-
+        else{
+            if (managerCompat != null){
+                managerCompat.cancel(1);
+            }
         }
 
 
     }
 
-    @Override
-    public void onResume() {
-        super.onResume();
-        Toast.makeText(getActivity(), "Timer OnRESUME", Toast.LENGTH_SHORT).show();
 
+    public void loadTimer(){
 
-        System.out.println("ON RESUME");
-        System.out.println(test);
 
         //gather previously stored time
         SharedPreferences prefs = getActivity().getSharedPreferences("prefs", getActivity().MODE_PRIVATE);
@@ -300,24 +389,35 @@ public class TimerFragment extends Fragment {
         timeLeft = prefs.getLong("millisLeft", initialTime);
         timerRunning = prefs.getBoolean("timerRunning", false);
 
+
+        if (finished >0){
+            System.out.println("dddd");
+        }
+
+        //updates countdown TextView and ProgressBar
         updateTimer();
 
 
+
+        //need to update timer again if timer has already finished
         if (timerRunning) {
-            test++;
             mEndTime = prefs.getLong("endTime", 0);
             timeLeft = mEndTime - System.currentTimeMillis();
+
             if (timeLeft < 0) {
                 timeLeft = 0;
                 timerRunning = false;
                 updateTimer();
 
-            } else {
+            }
+
+            else {
                 startTimer();
             }
         }
 
     }
+
 
     @Override
     public void onPause() {
@@ -325,19 +425,31 @@ public class TimerFragment extends Fragment {
 
         saveTime();
 
+        Paused=true;
+
     }
 
-
+    @Override
+    public void onResume() {
+        super.onResume();
+        Paused=false;
+    }
 
     //called anytime the user leaves the timer/stops the clocks or inputs a new time
     public void saveTime(){
-        SharedPreferences prefs = getActivity().getSharedPreferences("prefs", getActivity().MODE_PRIVATE);
-        SharedPreferences.Editor editor = prefs.edit();
-        editor.putLong("initialTime", initialTime);
-        editor.putLong("millisLeft", timeLeft);
-        editor.putBoolean("timerRunning", timerRunning);
-        editor.putLong("endTime", mEndTime);
-        editor.apply();
+
+
+        if (getActivity() !=null) {
+            SharedPreferences prefs = getActivity().getSharedPreferences("prefs", getActivity().MODE_PRIVATE);
+            SharedPreferences.Editor editor = prefs.edit();
+            editor.putLong("initialTime", initialTime);
+            editor.putLong("millisLeft", timeLeft);
+            editor.putBoolean("timerRunning", timerRunning);
+            editor.putLong("endTime", mEndTime);
+            editor.apply();
+
+        }
+
 
     }
 
