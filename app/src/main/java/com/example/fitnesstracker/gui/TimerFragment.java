@@ -4,7 +4,9 @@ import android.app.Activity;
 import android.app.Notification;
 import android.app.NotificationChannel;
 import android.app.NotificationManager;
+import android.app.PendingIntent;
 import android.content.Context;
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Build;
 import android.os.Bundle;
@@ -95,9 +97,15 @@ public class TimerFragment extends Fragment {
 
 
     public void buildNotification(String time){
+        Intent resultIntent = new Intent(getActivity(), MainActivity.class);
+        PendingIntent resultPendingIntent = PendingIntent.getActivity(getActivity(), 1, resultIntent, PendingIntent.FLAG_UPDATE_CURRENT);
+
+
         notificationBuilder.setSmallIcon(R.drawable.dumbbell)
                 .setContentTitle("Title")
-                .setContentText(time);
+                .setContentText(time)
+                .setContentIntent(resultPendingIntent);
+
 
         managerCompat = NotificationManagerCompat.from(getActivity());
         managerCompat.notify(1, notificationBuilder.build());
@@ -332,6 +340,9 @@ public class TimerFragment extends Fragment {
 
         }
 
+        int total_seconds = (int) (timeLeft)/1000;
+
+
 
         //reset timer if timeLeft is 0 (i.e. 0 set by loadTimer())
         if (timeLeft == initialTime){
@@ -348,11 +359,8 @@ public class TimerFragment extends Fragment {
 
 
 
-
-        int total_seconds = (int) (timeLeft)/1000;
-
         //progressbar only gets updated once every second
-        if (curr_sec != total_seconds && timerRunning){
+        else if (curr_sec != total_seconds && timerRunning){
 
             float progressFloat = ((float) total_seconds/ (float) initial_sec) * 100;
 
@@ -366,6 +374,7 @@ public class TimerFragment extends Fragment {
         }
 
         System.out.println("Paused:  "+Paused);
+
         if (Paused){
             buildNotification(countdownText.getText().toString());
         }

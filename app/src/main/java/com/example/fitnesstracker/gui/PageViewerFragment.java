@@ -1,5 +1,6 @@
 package com.example.fitnesstracker.gui;
 
+import android.graphics.pdf.PdfDocument;
 import android.os.Bundle;
 
 import androidx.fragment.app.Fragment;
@@ -8,11 +9,12 @@ import androidx.viewpager2.widget.ViewPager2;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 
 import com.example.fitnesstracker.R;
 
 
-public class PageViewerFragment extends Fragment {
+public class PageViewerFragment extends Fragment implements WorkoutLogFragment.WorkoutLogListener {
 
     View view;
 
@@ -22,7 +24,7 @@ public class PageViewerFragment extends Fragment {
     WorkoutLogFragment WorkoutLogFrag;
     TimerFragment TimerFrag;
 
-    private int i;
+
 
 
 
@@ -37,7 +39,7 @@ public class PageViewerFragment extends Fragment {
                              Bundle savedInstanceState) {
         view = inflater.inflate(R.layout.fragment_page_viewer, container, false);
 
-        i++;
+
 
         viewPager = view.findViewById(R.id.ViewPager2Widget);
 
@@ -55,6 +57,8 @@ public class PageViewerFragment extends Fragment {
 
 
 
+
+
         return view;
     }
 
@@ -65,11 +69,9 @@ public class PageViewerFragment extends Fragment {
         TimerFrag.onPause();
     }
 
+
     @Override
-    public void onResume() {
-        super.onResume();
-
-
-
+    public void openTimer() {
+        viewPager.setCurrentItem(0);
     }
 }

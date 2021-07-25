@@ -55,8 +55,11 @@ public class WorkoutLogFragment extends Fragment implements addSetDialog.addSetD
 
     addSetDialog Dialog;
 
-    private int test;
+    private WorkoutLogListener listener;
 
+    public interface WorkoutLogListener{
+        void openTimer();
+    }
 
 
     public WorkoutLogFragment() {
@@ -101,9 +104,9 @@ public class WorkoutLogFragment extends Fragment implements addSetDialog.addSetD
         enterTimer.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                listener = (WorkoutLogFragment.WorkoutLogListener) getParentFragment();
 
-
-
+                listener.openTimer();
             }
         });
 
@@ -328,6 +331,7 @@ public class WorkoutLogFragment extends Fragment implements addSetDialog.addSetD
 
 
     }
+
 
 
 }

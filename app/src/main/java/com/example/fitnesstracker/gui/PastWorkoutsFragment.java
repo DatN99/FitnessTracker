@@ -130,7 +130,8 @@ public class PastWorkoutsFragment extends Fragment {
                     currDate += ":";
                 }
                 if (i == 3){
-                    currDate += ") ";
+                    currDate += ")  ";
+
                 }
 
                 if (i == 5) {
@@ -170,7 +171,12 @@ public class PastWorkoutsFragment extends Fragment {
             while (i != s.length()-1){
 
                 if (s.charAt(i) == '|') {
-                    currSet += "\n";
+                    currSet += "\n\n";
+                    i++;
+                }
+
+                if (s.charAt(i) == '-'){
+                    currSet+="           ";
                     i++;
                 }
 
