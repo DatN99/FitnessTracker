@@ -14,6 +14,12 @@ import com.example.fitnesstracker.workout.Sets;
 
 import java.util.ArrayList;
 
+/**
+ * This class is responsible for the cardviews in "WorkoutLogFragment"'s RecyclerView
+ *
+ * Each cardview displays the exercise name, reps, and weight (lbs)
+ * On each cardview, there is also an option to add a duplicate set and edit that target set
+ */
 
 public class SetAdapter extends RecyclerView.Adapter<SetAdapter.SetViewHolder> {
 

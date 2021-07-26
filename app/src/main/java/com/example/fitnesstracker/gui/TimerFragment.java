@@ -68,6 +68,7 @@ public class TimerFragment extends Fragment {
 
     private int finished;
 
+    private MainActivityListener listener;
 
 
     @Override
@@ -76,7 +77,8 @@ public class TimerFragment extends Fragment {
         // Inflate the layout for this fragment
         view = inflater.inflate(R.layout.fragment_timer, container, false);
 
-        System.out.println("ON CREATE VIEW");
+
+        listener = (MainActivityListener) getActivity();
 
 
 
@@ -97,18 +99,21 @@ public class TimerFragment extends Fragment {
 
 
     public void buildNotification(String time){
-        Intent resultIntent = new Intent(getActivity(), MainActivity.class);
-        PendingIntent resultPendingIntent = PendingIntent.getActivity(getActivity(), 1, resultIntent, PendingIntent.FLAG_UPDATE_CURRENT);
+
+        if (listener.getWorkoutState()== true) {
+            Intent resultIntent = new Intent(getActivity(), MainActivity.class);
+            PendingIntent resultPendingIntent = PendingIntent.getActivity(getActivity(), 1, resultIntent, PendingIntent.FLAG_UPDATE_CURRENT);
 
 
-        notificationBuilder.setSmallIcon(R.drawable.dumbbell)
-                .setContentTitle("Title")
-                .setContentText(time)
-                .setContentIntent(resultPendingIntent);
+            notificationBuilder.setSmallIcon(R.drawable.dumbbell)
+                    .setContentTitle("Title")
+                    .setContentText(time)
+                    .setContentIntent(resultPendingIntent);
 
 
-        managerCompat = NotificationManagerCompat.from(getActivity());
-        managerCompat.notify(1, notificationBuilder.build());
+            managerCompat = NotificationManagerCompat.from(getActivity());
+            managerCompat.notify(1, notificationBuilder.build());
+        }
 
     }
 

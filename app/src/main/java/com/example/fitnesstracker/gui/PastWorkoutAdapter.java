@@ -11,8 +11,10 @@ import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.fitnesstracker.R;
+import com.example.fitnesstracker.workout.Sets;
 
 import java.util.ArrayList;
+import java.util.Set;
 
 public class PastWorkoutAdapter extends RecyclerView.Adapter<PastWorkoutAdapter.PastWorkoutViewHolder>{
 
@@ -20,7 +22,9 @@ public class PastWorkoutAdapter extends RecyclerView.Adapter<PastWorkoutAdapter.
     private static ArrayList<String> VolumeList;
     private static ArrayList<String> SetsList;
 
+
     class PastWorkoutViewHolder extends RecyclerView.ViewHolder{
+
         private static final String TAG = "PastWorkoutViewHolder";
 
         public TextView TimeDate;
@@ -41,6 +45,8 @@ public class PastWorkoutAdapter extends RecyclerView.Adapter<PastWorkoutAdapter.
             expandButton = itemView.findViewById(R.id.expandButton);
             expandableLayout = itemView.findViewById(R.id.expandableConstraintLayout);
             expandableLayout.setVisibility(View.GONE);
+
+
 
             expandButton.setOnClickListener(new View.OnClickListener() {
                 @Override
@@ -70,11 +76,13 @@ public class PastWorkoutAdapter extends RecyclerView.Adapter<PastWorkoutAdapter.
         this.VolumeList = VolumeList;
         this.SetsList = SetsList;
 
+
     }
 
 
     @Override
     public PastWorkoutViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+
 
         View v = LayoutInflater.from(parent.getContext()).inflate(R.layout.cardviewpast, parent, false);
         PastWorkoutViewHolder svh = new PastWorkoutViewHolder(v);
@@ -84,9 +92,18 @@ public class PastWorkoutAdapter extends RecyclerView.Adapter<PastWorkoutAdapter.
     @Override
     public void onBindViewHolder(PastWorkoutAdapter.PastWorkoutViewHolder holder, int position) {
 
-        holder.TimeDate.setText(TimeDateList.get(position));
-        holder.Volume.setText(VolumeList.get(position));
-        holder.SetInfo.setText(SetsList.get(position));
+
+
+
+            holder.TimeDate.setText(TimeDateList.get(position));
+            holder.Volume.setText(VolumeList.get(position));
+            holder.SetInfo.setText(SetsList.get(position));
+
+
+
+
+
+
 
     }
 

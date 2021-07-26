@@ -1,7 +1,9 @@
 package com.example.fitnesstracker.gui;
 
+import android.content.res.Configuration;
 import android.os.Bundle;
 
+import androidx.appcompat.app.AppCompatDelegate;
 import androidx.fragment.app.Fragment;
 
 import android.view.LayoutInflater;
@@ -11,6 +13,7 @@ import android.view.ViewGroup;
 import com.example.fitnesstracker.R;
 import com.github.mikephil.charting.charts.LineChart;
 import com.github.mikephil.charting.components.XAxis;
+import com.github.mikephil.charting.components.YAxis;
 import com.github.mikephil.charting.data.Entry;
 import com.github.mikephil.charting.data.LineData;
 import com.github.mikephil.charting.data.LineDataSet;
@@ -47,6 +50,8 @@ public class ProgressGraphFragment extends Fragment {
 
         view = inflater.inflate(R.layout.fragment_progress_graph, container, false);
 
+
+
         Chart = view.findViewById(R.id.progressChartView);
         Chart.setDragEnabled(true);
         Chart.setScaleEnabled(false);
@@ -65,7 +70,7 @@ public class ProgressGraphFragment extends Fragment {
         }
 
 
-        LineDataSet set = new LineDataSet(values, "Data Set");
+        LineDataSet set = new LineDataSet(values, "Volume");
         ArrayList<ILineDataSet> dataset = new ArrayList<>();
         dataset.add(set);
         LineData data = new LineData(dataset);
@@ -80,18 +85,30 @@ public class ProgressGraphFragment extends Fragment {
         }
 
 
+
+        Chart.setVisibleXRangeMaximum(TimeDateList.size());
+
+        YAxis yAxisRight = Chart.getAxisRight();
+        yAxisRight.setEnabled(false);
+
+
         XAxis xAxis = Chart.getXAxis();
 
         xAxis.setPosition(XAxis.XAxisPosition.BOTTOM);
-        xAxis.setDrawGridLines(true);
+        xAxis.setDrawGridLines(false);
         xAxis.setDrawLabels(true);
-        xAxis.setDrawAxisLine(true);
+        xAxis.setDrawAxisLine(false);
 
         xAxis.setLabelCount(s.size(), true);
+        xAxis.setLabelRotationAngle(-45);
+        xAxis.setCenterAxisLabels(false);
 
         xAxis.setValueFormatter(new IndexAxisValueFormatter(s));
 
+        Chart.getXAxis().setGranularityEnabled(true);
+        Chart.getAxisLeft().setGranularity(1f);
         Chart.invalidate();
+
         return view;
     }
 

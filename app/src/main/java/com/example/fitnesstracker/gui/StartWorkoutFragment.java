@@ -12,14 +12,21 @@ import android.widget.Button;
 
 import com.example.fitnesstracker.R;
 
+/**
+ * This fragment holds the opening screen for the user
+ * To start a workout, the user simply presses the "Start Workout" Button
+ * Following the button press, the "MainActivityListener" will change "mWorkoutStarted" in MainActivity
+ */
 
 public class StartWorkoutFragment extends Fragment {
 
     View view;
 
-    private Button startWorkout;
+    //"Start Workout" Button
+    private Button mStartWorkout;
 
-    private MainActivityListener listener;
+    //listener for MainActivity
+    private MainActivityListener mListener;
 
 
     @Override
@@ -27,27 +34,30 @@ public class StartWorkoutFragment extends Fragment {
                              Bundle savedInstanceState) {
         view = inflater.inflate(R.layout.fragment_start_workout, container, false);
 
+        //Setup "Start Workout" Button
+        mStartWorkout = view.findViewById(R.id.startWorkoutButton);
 
-        startWorkout = view.findViewById(R.id.startWorkoutButton);
-
-        startWorkout.setOnClickListener(new View.OnClickListener() {
+        mStartWorkout.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
 
-                listener.updateWorkoutState();
+                //change workout status and open WorkoutFragment
+                mListener.updateWorkoutState();
+
             }
         });
+
 
         return view;
     }
 
-
+    //this method is automatically called before onCreate and initializes "mlistener"
     @Override
     public void onAttach(Context context) {
         super.onAttach(context);
 
         try {
-            listener = (MainActivityListener) getActivity();
+            mListener = (MainActivityListener) getActivity();
         } catch (ClassCastException e){
             throw new ClassCastException(context.toString() + "must implement MainActivityListener");
         }

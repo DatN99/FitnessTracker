@@ -14,8 +14,9 @@
 
         <com.github.mikephil.charting.charts.LineChart
             android:id="@+id/progressChartView"
-            android:layout_width="2in"
-            android:layout_height="2in"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:background="@drawable/whitebackground"
             android:layout_centerHorizontal="true"
             android:layout_centerVertical="true"/>
 

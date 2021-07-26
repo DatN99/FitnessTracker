@@ -35,10 +35,12 @@ public class FinishFragment extends Fragment {
     ArrayList<Sets> SetsList;
 
     //File Workout is saved to
-    private static final String ALL_WORKOUTS = "workouts.txt";
     private String workoutStr;
 
     private MainActivityListener listener;
+
+    private static final String ALL_WORKOUTS = "workouts.txt";
+
 
     private Button exit;
 
@@ -117,6 +119,8 @@ public class FinishFragment extends Fragment {
 
     public void saveWorkout(){
         FileOutputStream fos = null;
+
+
 
         try {
 

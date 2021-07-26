@@ -17,7 +17,6 @@
             android:id="@+id/workoutlogrecyclerView"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:background="@color/design_default_color_on_primary"
             android:paddingBottom="150dp"
             android:clipToPadding="false"
             android:scrollbars="vertical"

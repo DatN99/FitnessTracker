@@ -10,6 +10,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.TextView;
 
 import com.example.fitnesstracker.R;
 
@@ -37,7 +38,7 @@ public class PastWorkoutsFragment extends Fragment {
     //RecyclerView variables
     private RecyclerView mRecyclerView;
     private RecyclerView.Adapter mAdapter;
-    private RecyclerView.LayoutManager mLayoutManager;
+    private LinearLayoutManager mLayoutManager;
     private static int position = 0;
 
     public PastWorkoutsFragment() {
@@ -50,6 +51,10 @@ public class PastWorkoutsFragment extends Fragment {
                              Bundle savedInstanceState) {
         view = inflater.inflate(R.layout.fragment_past_workouts, container, false);
 
+
+        TextView noWorkouts = view.findViewById(R.id.noWorkoutsTextView);
+        noWorkouts.setVisibility(View.GONE);
+
         loadWorkouts();
 
         getTimeDateArray();
@@ -57,6 +62,10 @@ public class PastWorkoutsFragment extends Fragment {
         getSets();
 
         showWorkouts();
+
+        if (SetsList.size() == 0){
+            noWorkouts.setVisibility(View.VISIBLE);
+        }
 
         return view;
 
@@ -69,9 +78,11 @@ public class PastWorkoutsFragment extends Fragment {
         mRecyclerView = view.findViewById(R.id.pastworkoutsrecyclerView);
         mRecyclerView.setHasFixedSize(false);
         mLayoutManager = new LinearLayoutManager(getActivity());
+        mLayoutManager.setReverseLayout(true);
         mAdapter = new PastWorkoutAdapter(TimeDateList, VolumeList, SetsList);
         mRecyclerView.setLayoutManager(mLayoutManager);
         mRecyclerView.setAdapter(mAdapter);
+        mRecyclerView.scrollToPosition(SetsList.size()-1);
 
     }
 

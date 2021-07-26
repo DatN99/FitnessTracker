@@ -11,15 +11,17 @@ import androidx.viewpager2.adapter.FragmentStateAdapter;
 
 import java.util.Timer;
 
+
+/**
+ * This class is used by "PageViewerFragment" to allow the user to switch between "WorkoutLogFragment" and "TimerFragment"
+ */
 public class PageViewerAdapter extends FragmentStateAdapter {
 
-
+    //Fragment Variables
     WorkoutLogFragment WorkoutLogFrag;
     TimerFragment TimerFrag;
 
-
-
-
+    //initialized class variables
     public PageViewerAdapter(Fragment F, WorkoutLogFragment WLF, TimerFragment TF) {
 
         super(F);
@@ -30,6 +32,8 @@ public class PageViewerAdapter extends FragmentStateAdapter {
         }
     }
 
+
+    //creates corresponding variables
     @Override
     public Fragment createFragment(int position) {
 
@@ -43,11 +47,12 @@ public class PageViewerAdapter extends FragmentStateAdapter {
 
     }
 
+
+    //returns number of items
     @Override
     public int getItemCount() {
         return 2;
     }
-
 
 
 }
