@@ -35,6 +35,8 @@ import it.xabaras.android.recyclerview.swipedecorator.RecyclerViewSwipeDecorator
 
 /**
  * This class contains the Recycler View used to display the user's sets in the current workout.
+ * Note: this fragment is page 1 of "PageViewerFragment"
+ *
  *
  * Upon entering this fragment, the app header bar will display a "FINISH" TextView that the user can click anywhere to finish their workout
  *
