@@ -1,7 +1,6 @@
 package com.example.fitnesstracker.gui;
 
 import android.app.Activity;
-import android.app.Notification;
 import android.app.NotificationChannel;
 import android.app.NotificationManager;
 import android.app.PendingIntent;
@@ -14,7 +13,6 @@ import android.os.Bundle;
 import androidx.core.app.NotificationCompat;
 import androidx.core.app.NotificationManagerCompat;
 import androidx.fragment.app.Fragment;
-import androidx.viewpager2.widget.ViewPager2;
 
 import android.os.CountDownTimer;
 import android.view.LayoutInflater;
@@ -25,13 +23,11 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ProgressBar;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.example.fitnesstracker.R;
 
 import java.util.Locale;
 
-import javax.xml.parsers.SAXParser;
 
 /**
  * This class contains a timer that the user can use to count down the time until their next set
@@ -111,7 +107,7 @@ public class TimerFragment extends Fragment {
 
 
     //method is used to build the notification and send it
-    public void buildNotification(String time){
+    private void buildNotification(String time){
 
         //only make notification if user is currently working out
         if (listener.getWorkoutState()== true) {
@@ -133,7 +129,7 @@ public class TimerFragment extends Fragment {
 
 
     //to be executed immediately upon timer creation
-    public void createNotificationChannel(){
+    private void createNotificationChannel(){
         notificationBuilder = new NotificationCompat.Builder(getActivity(), "1");
 
         // Create the NotificationChannel if API > 26
@@ -315,6 +311,9 @@ public class TimerFragment extends Fragment {
                 @Override
                 public void onTick(long millisUntilFinished) {
 
+                    System.out.println(timeLeft);
+
+
                     //update timeLeft
                     timeLeft = millisUntilFinished;
 
@@ -368,6 +367,7 @@ public class TimerFragment extends Fragment {
 
     //method is used to update the visuals of the timer widget and progress bar
     private void updateTimer(){
+
 
         //get current sec from ms
         if (curr_sec == 0){
@@ -440,7 +440,7 @@ public class TimerFragment extends Fragment {
 
 
     //method loads timer from previously saved state before onPause()
-    public void loadTimer(){
+    private void loadTimer(){
 
         //gather previously stored time
         SharedPreferences prefs = getActivity().getSharedPreferences("prefs", getActivity().MODE_PRIVATE);
@@ -496,7 +496,7 @@ public class TimerFragment extends Fragment {
     }
 
     //called anytime the user leaves the timer/stops the clocks or inputs a new time
-    public void saveTime(){
+    private void saveTime(){
 
         if (getActivity() !=null) {
 

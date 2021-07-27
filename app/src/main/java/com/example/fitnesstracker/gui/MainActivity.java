@@ -164,7 +164,7 @@ public class MainActivity extends AppCompatActivity implements MainActivityListe
 
 
     //this method is only called by clicking on "Past" on the Bottom Navigation
-    public void openPastWorkoutsFragment(){
+    private void openPastWorkoutsFragment(){
 
         getSupportFragmentManager()
                 .beginTransaction()
@@ -176,7 +176,7 @@ public class MainActivity extends AppCompatActivity implements MainActivityListe
 
 
     //this method is only called by clicking on "Graph" on the Bottom Navigation
-    public void openGraphFragment(){
+    private void openGraphFragment(){
 
          getSupportFragmentManager()
                 .beginTransaction()

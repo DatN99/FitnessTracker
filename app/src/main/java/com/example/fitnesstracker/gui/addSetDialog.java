@@ -15,12 +15,22 @@ import com.example.fitnesstracker.R;
 import com.example.fitnesstracker.workout.Sets;
 import com.google.android.material.textfield.TextInputLayout;
 
+/**
+ * This class opens up a Dialog Fragment when user either wants to add a new set or edit an already created set
+ *
+ * Features:
+ * Upon adding a new set, all edittext fields will be empty
+ * Once the user presses "Confirm Set", the Dialog Fragment disappears
+ *
+ * Upon editing an already created set, all edittext fields will be automatically set to that set's attributes
+ */
+
 public class addSetDialog extends AppCompatDialogFragment {
 
+    //Set variables
     private String name;
     private String reps;
     private String weight;
-
     private Sets set = null;
 
     //Widget variables
@@ -29,7 +39,7 @@ public class addSetDialog extends AppCompatDialogFragment {
     private TextInputLayout repsInput;
     private TextInputLayout weightInput;
 
-
+    //DialogFragment variables
     private addSetDialogListener listener;
     private int position;
 
@@ -40,40 +50,43 @@ public class addSetDialog extends AppCompatDialogFragment {
     }
 
 
-
-
     @Override
     public Dialog onCreateDialog(Bundle savedInstanceStanec) {
 
+        //set up builder
         AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
 
         LayoutInflater inflater = getActivity().getLayoutInflater();
 
         View view = inflater.inflate(R.layout.layout_dialog, null);
 
-
         builder.setView(view);
         builder.setTitle("New Set");
         builder.create();
 
+        //find widgets
         nameInput = view.findViewById(R.id.nameTextInput);
         repsInput = view.findViewById(R.id.repsTextInput);
         weightInput = view.findViewById(R.id.weightTextInput);
         confirmSetButton = view.findViewById(R.id.confirmSetButton);
 
-
+        //when user edits a set
         if (set != null){
             nameInput.getEditText().setText(set.getName());
             repsInput.getEditText().setText(set.getReps());
             weightInput.getEditText().setText(set.getWeight());
         }
 
-
+        //confirm new set info
         confirmSetButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+
+                //All edittext fields must have valid inputs
                 if (set != null){
                     if (validateName() && validateReps() && validateWeight()){
+
+                        //send back to "WorkoutLogFragment"
                         listener.changeSetInfo(name, reps, weight, position);
                         dismiss();
 
@@ -81,6 +94,8 @@ public class addSetDialog extends AppCompatDialogFragment {
                 }
 
                 else if (validateName() && validateReps() && validateWeight()){
+
+                    //send back to "WorkoutLogFragment"
                     listener.sendSetInfo(name, reps, weight);
                     dismiss();
 
@@ -88,12 +103,13 @@ public class addSetDialog extends AppCompatDialogFragment {
             }
         });
 
-
+        //show Dialog Fragment
         return builder.show();
 
     }
 
 
+    //method sets up listener
     @Override
     public void onAttach(Context context) {
         super.onAttach(context);

@@ -16,6 +16,11 @@ import com.example.fitnesstracker.workout.Sets;
 import java.util.ArrayList;
 import java.util.Set;
 
+/**
+ * This class is responsible for displaying the correct info for each past workout in a cardview (including the expandable layout)
+ *
+ */
+
 public class PastWorkoutAdapter extends RecyclerView.Adapter<PastWorkoutAdapter.PastWorkoutViewHolder>{
 
     private static ArrayList<String> TimeDateList;
@@ -25,7 +30,6 @@ public class PastWorkoutAdapter extends RecyclerView.Adapter<PastWorkoutAdapter.
 
     class PastWorkoutViewHolder extends RecyclerView.ViewHolder{
 
-        private static final String TAG = "PastWorkoutViewHolder";
 
         public TextView TimeDate;
         public TextView Volume;
@@ -38,20 +42,20 @@ public class PastWorkoutAdapter extends RecyclerView.Adapter<PastWorkoutAdapter.
         public PastWorkoutViewHolder(View itemView) {
             super(itemView);
 
+            //find widgets
             TimeDate = itemView.findViewById(R.id.dateTextView);
             Volume = itemView.findViewById(R.id.volumeTextView);
             SetInfo = itemView.findViewById(R.id.SetInfoTextView);
 
+            //Expandable View Widgets
             expandButton = itemView.findViewById(R.id.expandButton);
             expandableLayout = itemView.findViewById(R.id.expandableConstraintLayout);
             expandableLayout.setVisibility(View.GONE);
 
-
-
+            //ExpandableView Setup
             expandButton.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-
 
                     if (expandableLayout.getVisibility() == View.VISIBLE){
                         expandableLayout.setVisibility(View.GONE);
@@ -83,27 +87,18 @@ public class PastWorkoutAdapter extends RecyclerView.Adapter<PastWorkoutAdapter.
     @Override
     public PastWorkoutViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
 
-
         View v = LayoutInflater.from(parent.getContext()).inflate(R.layout.cardviewpast, parent, false);
         PastWorkoutViewHolder svh = new PastWorkoutViewHolder(v);
         return svh;
     }
 
+
     @Override
     public void onBindViewHolder(PastWorkoutAdapter.PastWorkoutViewHolder holder, int position) {
-
-
-
 
             holder.TimeDate.setText(TimeDateList.get(position));
             holder.Volume.setText(VolumeList.get(position));
             holder.SetInfo.setText(SetsList.get(position));
-
-
-
-
-
-
 
     }
 

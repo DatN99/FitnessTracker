@@ -22,15 +22,22 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.util.ArrayList;
 
-
+/**
+ * This class is responsible for showing all of the user's past workouts in a RecyclerView
+ * The RecyclerView uses a reverse layout, so the top card shows the most recent workout
+ *
+ * Features:
+ * Each card displays a (time) date and volume
+ * Clicking on the down arrow will expand the card and show all of the users sets during that workout
+ */
 public class PastWorkoutsFragment extends Fragment {
     View view;
 
     //String representation of workouts.txt (holds data on all previous workouts)
-    ArrayList<String> WorkoutList = new ArrayList<String>();
-    ArrayList<String> VolumeList = new ArrayList<String>();
-    ArrayList<String> TimeDateList = new ArrayList<String>();
-    ArrayList<String> SetsList = new ArrayList<String>();
+    private ArrayList<String> WorkoutList = new ArrayList<String>();
+    private ArrayList<String> VolumeList = new ArrayList<String>();
+    private ArrayList<String> TimeDateList = new ArrayList<String>();
+    private ArrayList<String> SetsList = new ArrayList<String>();
 
     private String workoutStr = "";
     private int totalWorkouts = 0;
@@ -51,16 +58,20 @@ public class PastWorkoutsFragment extends Fragment {
                              Bundle savedInstanceState) {
         view = inflater.inflate(R.layout.fragment_past_workouts, container, false);
 
-
+        //display "No Workouts" if user has not yet completed a workout
         TextView noWorkouts = view.findViewById(R.id.noWorkoutsTextView);
         noWorkouts.setVisibility(View.GONE);
 
+        //get all workouts into WorkoutList
         loadWorkouts();
 
+        //get time/date and volume info
         getTimeDateArray();
 
+        //get sets
         getSets();
 
+        //display workouts
         showWorkouts();
 
         if (SetsList.size() == 0){
@@ -72,6 +83,7 @@ public class PastWorkoutsFragment extends Fragment {
     }
 
 
+    //method shows all past Workouts with a Reversed RecyclerView
     private void showWorkouts() {
 
         //RecyclerView Setup
@@ -87,27 +99,34 @@ public class PastWorkoutsFragment extends Fragment {
     }
 
 
+    //method gets all data from file input from internal storage and adds all lines to WorkoutList
     private void loadWorkouts(){
         FileInputStream fis = null;
 
         String currLine = "";
 
         try {
+
+            //open file
             fis = getActivity().openFileInput("workouts.txt");
             InputStreamReader isr = new InputStreamReader(fis);
             BufferedReader br = new BufferedReader(isr);
             StringBuilder sb = new StringBuilder();
             String line;
 
+            //add lines to sb
             while ((line = br.readLine()) != null) {
                 sb.append(line).append("\n");
                 totalWorkouts++;
             }
 
+            //add sb to workoutStr
             workoutStr = sb.toString();
 
+            //add workoutStr to WorkoutList
             for (int i = 0; i < workoutStr.length(); i++) {
                 currLine += workoutStr.charAt(i);
+
                 if (workoutStr.charAt(i) == '\n') {
                     WorkoutList.add(currLine);
                     currLine = "";
@@ -126,6 +145,7 @@ public class PastWorkoutsFragment extends Fragment {
     }
 
 
+    //method gets all time/date and volume info from WorkoutList
     private void getTimeDateArray(){
         String currVolume = "";
         String currDate = "";
@@ -153,6 +173,7 @@ public class PastWorkoutsFragment extends Fragment {
                     currDate += "/";
                 }
 
+                //get Volume
                 if (i == 11) {
                     i++;
 
@@ -163,6 +184,7 @@ public class PastWorkoutsFragment extends Fragment {
                 }
             }
 
+            //add to array
             TimeDateList.add(currDate);
             VolumeList.add(currVolume);
             currVolume="";
@@ -172,13 +194,15 @@ public class PastWorkoutsFragment extends Fragment {
     }
 
 
-    public void getSets(){
+    //method gets all set info from WorkoutList
+    private void getSets(){
 
         for (String s: WorkoutList){
             int i = s.indexOf("|") +1;
 
             String currSet = "";
 
+            //get each set and format
             while (i != s.length()-1){
 
                 if (s.charAt(i) == '|') {

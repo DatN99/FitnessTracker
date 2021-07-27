@@ -50,7 +50,7 @@ import it.xabaras.android.recyclerview.swipedecorator.RecyclerViewSwipeDecorator
  * Note: the RecyclerView uses "SetAdapter" to make any changes to the Set cards
  *
  * Dialog Features:
- * Upon clicking on the + icon, an alertdialog will pop up allowing the user to enter the set's name, reps, and weight
+ * Upon clicking on the + icon, an dialog fragment will pop up allowing the user to enter the set's name, reps, and weight
  * The user can pick any name they want, but the reps and weight must be numbers otherwise the corresponding EditText will throw an error notifying the use to correct their input
  * Pressing "confirm set" will add the set to the SetsList and RecyclerView
  */
@@ -70,10 +70,10 @@ public class WorkoutLogFragment extends Fragment implements addSetDialog.addSetD
     private RecyclerView.LayoutManager mLayoutManager;
 
     //Sets variable which contains all of the Sets objects created by the user
-    ArrayList<Sets> mSetsList = new ArrayList<>();
+    private ArrayList<Sets> mSetsList = new ArrayList<>();
 
-    //Dialog variable which extends AlertDialog
-    addSetDialog mDialog;
+    //Dialog variable which extends Dialog Fragment
+    private addSetDialog mDialog;
 
     //Listener variable
     private WorkoutLogListener mListener;
@@ -223,12 +223,12 @@ public class WorkoutLogFragment extends Fragment implements addSetDialog.addSetD
 
 
     //allows user to edit a Set card
-    public void editItem(int position){
+    private void editItem(int position){
 
         //gets Set to be edited
         Sets lEditSet = mSetsList.get(position);
 
-        //show alertdialog with Set's info
+        //show lDialog with Set's info
         addSetDialog lDialog = new addSetDialog();
         lDialog.loadSetInfo(lEditSet, position);
         lDialog.show(getChildFragmentManager(), "editSet");
@@ -237,7 +237,7 @@ public class WorkoutLogFragment extends Fragment implements addSetDialog.addSetD
 
 
     //allows user to remove item (used by ItemTouchHelper)
-    public void removeItem(int position){
+    private void removeItem(int position){
 
         //remove from SetsList
         mSetsList.remove(position);
@@ -249,7 +249,7 @@ public class WorkoutLogFragment extends Fragment implements addSetDialog.addSetD
 
 
     //allows user to add a copy of the desired set
-    public void addCopy(int position, Sets copy){
+    private void addCopy(int position, Sets copy){
 
         //add to SetsList
         mSetsList.add(position, copy);
@@ -296,7 +296,7 @@ public class WorkoutLogFragment extends Fragment implements addSetDialog.addSetD
 
 
     //opens fragment when "Add Set" button is clicked
-    public void openDialog(){
+    private void openDialog(){
 
         //show from "addSetDialog"
         mDialog = new addSetDialog();
@@ -307,7 +307,7 @@ public class WorkoutLogFragment extends Fragment implements addSetDialog.addSetD
 
 
     //method calls for the finishing of a workout
-    public void finishWorkout(){
+    private void finishWorkout(){
 
         //pass SetsList into "FinishFragment"
         FinishFragment fragment = new FinishFragment();
@@ -328,7 +328,7 @@ public class WorkoutLogFragment extends Fragment implements addSetDialog.addSetD
 
 
     //method is called whenever "WorkoutLogFragment" is back in view so RecyclerView can show already created sets
-    public void loadSets(){
+    private void loadSets(){
 
         //get Sets from shared prefs
         SharedPreferences lData = getActivity().getSharedPreferences("data", getActivity().MODE_PRIVATE);

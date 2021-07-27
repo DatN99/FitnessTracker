@@ -23,12 +23,19 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.util.ArrayList;
 
+/**
+ * The main purpose of this class is to save all aspects of the workout, and tag it with a time and date, in the user's internal storage
+ * This fragment displays a finishing screen that enters from the top of the screen through an animation
+ * The user can click the X at the top right corner to close this screen
+ */
 public class FinishFragment extends Fragment {
 
     View view;
 
     //Widget variables
-    TextView finish;
+    private TextView finish;
+    private TextView exit;
+
 
     //Workout/Sets variables
     Workout workout;
@@ -36,13 +43,11 @@ public class FinishFragment extends Fragment {
 
     //File Workout is saved to
     private String workoutStr;
-
-    private MainActivityListener listener;
-
     private static final String ALL_WORKOUTS = "workouts.txt";
 
+    //listener variable
+    private MainActivityListener listener;
 
-    private Button exit;
 
     public FinishFragment() {
         // Required empty public constructor
@@ -52,12 +57,15 @@ public class FinishFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
+
         // Inflate the layout for this fragment
         view = inflater.inflate(R.layout.fragment_finish, container, false);
 
+        //get rid of "FINISH" in app header
         finish = getActivity().findViewById(R.id.finishText);
         finish.setVisibility(View.GONE);
 
+        //give functionality to exit TextView
         exit = view.findViewById(R.id.exitButton);
 
         exit.setOnClickListener(new View.OnClickListener() {
@@ -67,27 +75,33 @@ public class FinishFragment extends Fragment {
             }
         });
 
+
+        //get current status of MainActivity's workoutStarted
         boolean workoutStarted = listener.getWorkoutState();
 
-
+        //open "StartWorkoutFragment" if user happens to land on this fragment without a workout being started
         if (!workoutStarted){
             openStartWorkoutFragment();
         }
 
         else {
 
+            //update MainActivity's workoutStarted
             listener.updateWorkoutState();
 
-
+            //get SetsList from "WorkoutLogActivity"
             if (getArguments() != null) {
                 SetsList = getArguments().getParcelableArrayList("Sets List");
             }
 
-
+            //if user actually inputted a set, save to internal storage
             if (SetsList.size() > 0) {
+
+                //create new Workout obj and save the workout
                 workout = new Workout();
                 workout.saveWorkout(SetsList);
 
+                //turn relevant info into string format
                 setWorkoutStr();
 
                 saveWorkout();
@@ -101,26 +115,27 @@ public class FinishFragment extends Fragment {
     }
 
 
+    //method turns all relevant info from a workout into a string
+    private void setWorkoutStr(){
 
-    public void setWorkoutStr(){
-
+        //get Workout's time and date
         workoutStr = workout.getTimeStr() + workout.getDateStr() + workout.getVolumeStr();
 
+        //add all sets
         String setinfo = "";
 
         for (Sets currSet:SetsList){
             setinfo += "|"+currSet.getString();
         }
 
+        //final String holding all relevant info
         workoutStr += setinfo +"\n";
 
     }
 
-
-    public void saveWorkout(){
+    //method saves workoutStr from setWorkoutStr to text file
+    private void saveWorkout(){
         FileOutputStream fos = null;
-
-
 
         try {
 
@@ -146,7 +161,7 @@ public class FinishFragment extends Fragment {
         }
     }
 
-
+    //method sets up listener
     @Override
     public void onAttach(Context context) {
         super.onAttach(context);
@@ -159,8 +174,8 @@ public class FinishFragment extends Fragment {
         }
     }
 
-
-    public void clearSets(){
+    //method empties sets from shared prefs
+    private void clearSets(){
 
         SharedPreferences data = getActivity().getSharedPreferences("data", getActivity().MODE_PRIVATE);
         SharedPreferences.Editor editor = data.edit();
@@ -172,6 +187,7 @@ public class FinishFragment extends Fragment {
         editor.apply();
     }
 
+    //method opens up "StartWorkoutFragment"
     private void openStartWorkoutFragment(){
         getActivity().getSupportFragmentManager()
                 .beginTransaction()
