@@ -48,6 +48,11 @@ Seeing Past Workouts
  * Each card displays a (time) date and volume
  * Clicking on the down arrow will expand the card and show all of the users sets during that workout
 
+<img align="left" src="https://user-images.githubusercontent.com/86983871/143134641-7f575e74-2224-435b-83d4-0310ae1ec0be.png" width="200" height="400" />
+<p align="center">
+  <img src="https://user-images.githubusercontent.com/86983871/143134647-331bf2d9-5e42-48dd-a71e-13574c8ec7d0.png" width="200" height="400" />
+</p>
+
 Seeing Progress Graph
  * Features:
  * y-axis = volume
