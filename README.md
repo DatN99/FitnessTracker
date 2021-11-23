@@ -1,7 +1,7 @@
 # FitnessTracker
 App that allows you to see your strength progress, over a graph, by manually-inputted workouts
 
-CHECK MASTER BRANCH FOR ALL COMMITS
+CHECK MASTER BRANCH FOR ALL COMMITS AND SOURCE CODE
 
 Users can switch between fragments by selecting on the desired tab using the bottom navigation. The opening fragment will always be the "StartWorkoutFragment" class
 
@@ -20,6 +20,8 @@ Recycler View Features:
  * Upon clicking on the + icon, an dialog fragment will pop up allowing the user to enter the set's name, reps, and weight
  * The user can pick any name they want, but the reps and weight must be numbers otherwise the corresponding EditText will throw an error notifying the use to correct their input
  * Pressing "confirm set" will add the set to the SetsList and RecyclerView
+
+![Screenshot (24)](https://user-images.githubusercontent.com/86983871/143132687-1662deaf-8a67-4674-aa51-68b47b4d4d18.png)
 
 Timer Features:
  * Once started, the timer can be paused or stopped. If paused, the time left is saved while the countdowntimer is cancelled. Once resumed, a new countdowntimer is created with the time left.
@@ -43,4 +45,6 @@ Seeing Progress Graph
  * x-axis = time/date
  *
  * x-axis labels are rotated for neatness
+
+
 
