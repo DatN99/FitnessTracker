@@ -21,7 +21,7 @@ Recycler View Features:
  * The user can pick any name they want, but the reps and weight must be numbers otherwise the corresponding EditText will throw an error notifying the use to correct their input
  * Pressing "confirm set" will add the set to the SetsList and RecyclerView
 
-<img src="https://user-images.githubusercontent.com/86983871/143132687-1662deaf-8a67-4674-aa51-68b47b4d4d18.png" width="200" height="400" />
+<img align="right" src="https://user-images.githubusercontent.com/86983871/143132687-1662deaf-8a67-4674-aa51-68b47b4d4d18.png" width="200" height="400" />
 <img src="https://user-images.githubusercontent.com/86983871/143133658-d5aaf9c5-bf2a-42f6-acf5-3a8b24dbbfbe.png" width="200" height="400" />
 
 
