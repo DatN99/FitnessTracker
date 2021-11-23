@@ -40,6 +40,8 @@ Timer Features:
 <p align="center">
   <img src="https://user-images.githubusercontent.com/86983871/143134282-e4faac97-2768-4e68-8eb9-2de9939e38be.png" width="200" height="400" />
 </p>
+<img align="right" src="https://user-images.githubusercontent.com/86983871/143134464-05e472e3-3978-4fa2-8b17-df14c629f055.png" width="200" height="400" />
+
 
 Seeing Past Workouts
 * Features:
