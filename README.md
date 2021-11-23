@@ -1,8 +1,6 @@
 # FitnessTracker
 App that allows you to see your strength progress, over a graph, by manually-inputted workouts
 
-CHECK MASTER BRANCH FOR ALL COMMITS AND SOURCE CODE
-
 Users can switch between fragments by selecting on the desired tab using the bottom navigation. The opening fragment will always be the "StartWorkoutFragment" class
 
 How to use app:
