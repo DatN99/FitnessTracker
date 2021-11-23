@@ -36,6 +36,10 @@ Timer Features:
  * The timer will be continuously updated as a notification so the user can see the progress on their timer without having to stay on this fragment.
  * The user can click on this notification from outside of the fragment to re-enter the fragment
 
+<img align="left" src="https://user-images.githubusercontent.com/86983871/143134273-b9bbbbf3-049b-4d1f-aeda-0bc58fe152d0.png" width="200" height="400" />
+<p align="center">
+  <img src="https://user-images.githubusercontent.com/86983871/143134282-e4faac97-2768-4e68-8eb9-2de9939e38be.png" width="200" height="400" />
+</p>
 
 Seeing Past Workouts
 * Features:
