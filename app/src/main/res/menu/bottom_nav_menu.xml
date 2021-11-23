@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+
+
+    <item
+        android:id="@+id/nav_workout"
+        android:icon="@drawable/dumbbell"
+        android:title="Workout"
+        />
+
+
+    <item
+        android:id="@+id/nav_past"
+        android:icon="@drawable/past"
+        android:title="Past"
+        />
+
+
+    <item
+        android:id="@+id/nav_progress"
+        android:icon="@drawable/graph"
+        android:title="Graph"
+        />
+
+</menu>
