@@ -22,6 +22,8 @@ Recycler View Features:
  * Pressing "confirm set" will add the set to the SetsList and RecyclerView
 
 <img src="https://user-images.githubusercontent.com/86983871/143132687-1662deaf-8a67-4674-aa51-68b47b4d4d18.png" width="200" height="400" />
+<img src="https://user-images.githubusercontent.com/86983871/143133658-d5aaf9c5-bf2a-42f6-acf5-3a8b24dbbfbe.png" width="200" height="400" />
+
 
 Timer Features:
  * Once started, the timer can be paused or stopped. If paused, the time left is saved while the countdowntimer is cancelled. Once resumed, a new countdowntimer is created with the time left.
