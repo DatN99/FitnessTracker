@@ -43,8 +43,12 @@ public class Workout {
         date = calendar.get(Calendar.DATE);
         year = calendar.get(Calendar.YEAR);
 
+<<<<<<< HEAD
         hour = calendar.get(Calendar.HOUR_OF_DAY);
         System.out.println(hour);
+=======
+        hour = calendar.get(Calendar.HOUR);
+>>>>>>> 6316ca1257b2a984c7a439f4e55e64ec3596df10
         minute = calendar.get(Calendar.MINUTE);
 
         key = Integer.toString(month) + "/" + Integer.toString(date) + "/" + Integer.toString(year);

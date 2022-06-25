@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
+<<<<<<< HEAD
   <component name="DesignSurface">
     <option name="filePathToZoomLevelMap">
       <map>
@@ -20,5 +21,9 @@
   </component>
   <component name="ProjectType">
     <option name="id" value="Android" />
+=======
+  <component name="ProjectRootManager" version="2" languageLevel="JDK_11" default="true" project-jdk-name="11" project-jdk-type="JavaSDK">
+    <output url="file://$PROJECT_DIR$/out" />
+>>>>>>> 6316ca1257b2a984c7a439f4e55e64ec3596df10
   </component>
 </project>

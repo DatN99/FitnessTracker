@@ -121,7 +121,10 @@ public class FinishFragment extends Fragment {
         //get Workout's time and date
         workoutStr = workout.getTimeStr() + workout.getDateStr() + workout.getVolumeStr();
 
+<<<<<<< HEAD
 
+=======
+>>>>>>> 6316ca1257b2a984c7a439f4e55e64ec3596df10
         //add all sets
         String setinfo = "";
 
