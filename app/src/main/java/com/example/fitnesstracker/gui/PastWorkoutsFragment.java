@@ -155,6 +155,7 @@ public class PastWorkoutsFragment extends Fragment {
             for (int i = 0; i < 12; i ++) {
 
                 currDate += s.charAt(i);
+                System.out.println(s.charAt(i));
 
                 //Format: (XX:XX) MM/DD/YYYY
                 if (i == 1){
